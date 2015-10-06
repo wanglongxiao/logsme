@@ -339,7 +339,7 @@ class WeixinController extends Controller
 			PostController::updateByIds($terms, $postids);
 			
 			// Send preview to @AW
-			//$res = $api->sendPreview ($newsid, "oIW4Bt_039khgU77y7PrGynbiseQ");
+			//$res = $api->sendPreview ($newsid, Config::get("weixin.adminopenid"));
 					
 			return $newsid;
 		}
@@ -373,7 +373,7 @@ class WeixinController extends Controller
 			} else {
 				// send Msg to @AW, no news can be pushed
 				echo "No news available \n";
-				$api->send(Config::get("weixin.adminopenid"), "无可用图文消息，请抓取");
+				$api->send(Config::get("weixin.adminopenid"), "No Available News");
 				return false;
 			}
 		}
@@ -431,7 +431,7 @@ class WeixinController extends Controller
 		}
 		
 		// send Msg to @AW, daily push done
-		$api->send(Config::get("weixin.adminopenid"), "已发送图文消息 ".$day);
+		$api->send(Config::get("weixin.adminopenid"), "News Sent To All ".$day);
 		
 		return true;
 	}

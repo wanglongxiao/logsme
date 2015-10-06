@@ -54,7 +54,7 @@ return [
 
         'mysql' => [
             'driver'    => 'mysql',
-        	//'unix_socket'   => '/tmp/mysql.sock',
+			//'unix_socket'   => '/tmp/mysql.sock',
         	//'host'      => env('DB_HOST', 'localhost'),
             //'database'  => env('DB_DATABASE', 'share'),
             //'username'  => env('DB_USERNAME', 'root'),

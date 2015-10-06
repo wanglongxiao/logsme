@@ -20,10 +20,10 @@ return [
 		'6' => '09:00:00',
 	],
 	
-	// AppID(应用ID)
+	// AppID
 	'appid' => "",
 
-	// AppSecret(应用密钥)
+	// AppSecret
 	'appsecret' => "",
 	
 	// Weixin admin openid : @AW

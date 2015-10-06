@@ -3,7 +3,7 @@
 @include('navbar')
 
 <?php 
-$hosturl = "127.0.0.1/weixin";
+$hosturl = "www.logs.me";
 ?>
 
 	<div class="container">
