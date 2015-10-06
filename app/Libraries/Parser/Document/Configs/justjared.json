@@ -1,0 +1,7 @@
+{
+    "testNodeTags" : ["p", "div", "article"],
+    "ignoredTags" : [],
+    "ignoredClasses" : [
+        "slider", "takeoverhed", "post-header", "post-plug", "comments", "partnerlove", "like-this", "postdata"
+    ]
+}

@@ -1,0 +1,35 @@
+{
+    "testNodeTags" : [],
+    "allowedTags" : [
+        "h1", "h2", "h3", "h4", "h5",
+        "b", "strong", "i", "a[href|title]",
+        "ul", "ol", "li", "p[style]", "br",
+        "span[style]", "img[width|height|alt|src]", "iframe[src]"
+    ],
+    "ignoredTags" : [
+        "style", "form", "script", "button", "input", "textarea", 
+        "noscript", "select", "option", "object", "applet", "basefont",
+        "bgsound", "blink", "canvas", "command", "datalist",
+        "frameset", "keygen", "label", "marquee", "link", 
+        "footer", "nav", "aside"
+    ],
+    "ignoredClasses" : [
+        "breadcrumb", "dialog", "related", "popup", "btn", "modal", "widget", 
+        "toolbar", "footer", "sharing", "menu", "nav", "admin", "logo", "disqus", 
+        "hidden", "hide", "sidebar", "site-header", "scroll-to-top", "advertisement",
+        "signin", "signup", "register", "login", "logon",  
+        "share_", "share-", 
+        "comments", "comment-", "comment_", 
+        "tabs", "tab_", "tab-",
+        "featured-"
+    ],
+    "overrideClasses" : [],
+    "allowedAttrs" : [
+        "src", "href"
+    ],
+    "videoHandling" : [],
+    "imageHandling" : [],
+    "handlingMap" : {
+
+    }
+}

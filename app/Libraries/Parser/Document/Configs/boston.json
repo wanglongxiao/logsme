@@ -1,0 +1,8 @@
+{
+    "testNodeTags" : ["p", "div", "article"],
+    "ignoredTags" : [],
+    "ignoredClasses" : [
+        "blogHeader", "elsew", "top_share_bar", "bpTools", "mastHeadTop", 
+        "middleLeft", "blogentryPrevNext", "comment", "bpTools", "elsew"
+    ]
+}

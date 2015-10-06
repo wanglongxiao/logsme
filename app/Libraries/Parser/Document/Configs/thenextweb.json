@@ -1,0 +1,7 @@
+{
+    "testNodeTags" : ["div"],
+    "ignoredTags" : [],
+    "ignoredClasses" : [
+        "article-more", "comments-wrapper", "announcement", "article-companies"
+    ]
+}

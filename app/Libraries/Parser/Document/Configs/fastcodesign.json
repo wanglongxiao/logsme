@@ -1,0 +1,7 @@
+{
+    "testNodeTags" : ["p", "div", "article"],
+    "ignoredTags" : [],
+    "ignoredClasses" : [
+        "comments", "page-jumbotron", "header-wrap"
+    ]
+}

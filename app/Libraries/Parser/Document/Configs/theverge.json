@@ -1,0 +1,9 @@
+{
+    "testNodeTags" : ["div"],
+    "ignoredTags" : [],
+    "ignoredClasses" : [
+        "hide", "m-header", "breakdown", "m-auth-modal", "posted_on", "cbody", 
+        "additional-comments", "comments", "go_to_comment", "simplelist", 
+        "community_analytics"
+    ]
+}

@@ -1,0 +1,16 @@
+{
+    "testNodeTags" : ["p", "div", "article"],
+    "ignoredTags" : [],
+    "ignoredClasses" : [
+        "widget-area", "title-area", "banner", "author-box", "sharethrough-placement"
+    ],
+    "overrideClasses" : [
+        "sidebar"
+    ],
+    "imageHandling" : [
+        "imgSrcHack"
+    ],
+    "handlingMap" : {
+        "imgSrcHack" : "data-cfsrc"
+    }
+}

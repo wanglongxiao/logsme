@@ -1,0 +1,7 @@
+{
+    "testNodeTags" : ["p"],
+    "ignoredTags" : [],
+    "ignoredClasses" : [
+        "hide", "taglist-container", "replies-wrapper"
+    ]
+}

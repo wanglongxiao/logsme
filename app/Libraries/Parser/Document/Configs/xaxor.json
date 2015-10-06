@@ -1,0 +1,7 @@
+{
+    "testNodeTags" : ["p", "div", "article"],
+    "ignoredTags" : [],
+    "ignoredClasses" : [
+        "category_box", "header_container", "wpspn-area", "sharebar" 
+    ]
+}

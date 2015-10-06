@@ -1,0 +1,19 @@
+{
+    "testNodeTags" : ["p", "div", "article"],
+    "ignoredTags" : [],
+    "ignoredClasses" : [
+        "js-infinite-container", "page-header", "more-info", "under-content", 
+        "zerg-widget", "content-page-mrec", "media-header-thumbnail"
+    ],
+    "overrideClasses" : [
+    ],
+    "imageHandling" : [
+        "imgSrcHack"
+    ],
+    "handlingMap" : {
+        "imgSrcHack" : [
+            "data-src",
+            "data-gif"
+        ]
+    }
+}

@@ -1,0 +1,29 @@
+{
+    "testNodeTags" : ["p", "div", "article"],
+    "ignoredTags" : [],
+    "ignoredClasses" : [
+        "header_wrapper", "featured-videos", "video-listing", 
+        "video_actions", "video_buzz_meta", "Contributions", "Contribute", 
+        "facebook_conversations", "next_on", "normal_reactions", "user-tier-box",
+        "community-text", "comment", "source_via_info", "featured_section",
+        "videoAdShares", "tab", "overlay", "video-lightbox", "share-box", "BF_TARGET_PIXEL",
+        "video_share_tools", "share", "social-actions", "Column2", "HotHead", "unified_header"
+    ],
+    "overrideClasses" : ["hide"],
+    "videoHandling" : [
+        "aTagVideo"
+    ],
+    "imageHandling" : [
+        "aTagImage",
+        "imgSrcHack",
+        "postFixReplace"
+    ],
+    "handlingMap" : {
+        "aTagImage" : "href",
+        "imgSrcHack" : "rel:bf_image_src",
+        "postFixReplace" : {
+            "from" : "_preview.gif",
+            "to" : ".gif"
+        }
+    }
+}

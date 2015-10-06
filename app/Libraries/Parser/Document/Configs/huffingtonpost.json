@@ -1,0 +1,7 @@
+{
+    "testNodeTags" : ["p", "div", "article"],
+    "ignoredTags" : [],
+    "ignoredClasses" : [
+        "promo_holder", "modal", "chicklets", "follow_tags", "mod-follow", "mastheader", "not_logged_user"
+    ]
+}

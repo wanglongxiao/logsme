@@ -1,0 +1,8 @@
+{
+    "testNodeTags" : ["p", "div", "article"],
+    "ignoredTags" : [],
+    "ignoredClasses" : [
+        "block_rotator", "main-header", "header_container", "top_bar", "headerpost", 
+        "container_shortcode_gallery", "post-full-similar", "block-comments", "pagination_single", "frameclrzvues"
+    ]
+}

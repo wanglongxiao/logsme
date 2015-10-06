@@ -1,0 +1,7 @@
+{
+    "testNodeTags" : ["p", "div", "article"],
+    "ignoredTags" : [],
+    "ignoredClasses" : [
+        "rail-container", "m-auth-modal", "follow-bar", "polygon_social_buttons", "comments"
+    ]
+}

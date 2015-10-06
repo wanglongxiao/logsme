@@ -1,0 +1,8 @@
+{
+    "testNodeTags" : ["p", "div", "article"],
+    "ignoredTags" : [],
+    "ignoredClasses" : [
+        "contentTopModule", "mainHeader", "socialTools", "FacebookLike", 
+        "recommended", "columnistsModule", "subheader", "rightColumn", "listEntry"
+    ]
+}

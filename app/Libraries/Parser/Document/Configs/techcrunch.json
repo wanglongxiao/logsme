@@ -1,0 +1,8 @@
+{
+    "testNodeTags" : ["p"],
+    "ignoredTags" : [],
+    "ignoredClasses" : [
+        "hide", "comment", "share", "social-list", "tags", 
+        "next-link", "announcement", "advertise"
+    ]
+}

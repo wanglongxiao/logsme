@@ -1,0 +1,7 @@
+{
+    "testNodeTags" : ["p", "div", "article"],
+    "ignoredTags" : [],
+    "ignoredClasses" : [
+        "mainbar", "JKAnchor", "dickbar2", "metadataBox", "comments-container", "commentlist", "logo"
+    ]
+}

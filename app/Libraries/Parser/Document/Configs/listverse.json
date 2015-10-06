@@ -1,0 +1,5 @@
+{
+    "testNodeTags" : ["p"],
+    "ignoredTags" : ["header"],
+    "ignoredClasses" : ["title-category", "head-title", "choice-", "share", "comment", "hide"]
+}

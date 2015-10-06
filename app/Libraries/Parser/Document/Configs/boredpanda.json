@@ -1,0 +1,7 @@
+{
+    "testNodeTags" : ["p", "div"],
+    "ignoredTags" : [],
+    "ignoredClasses" : [
+        "Thumb144", "rightadsensethumb", "post-subscribe", "do-you-like-box"
+    ]
+}

@@ -1,0 +1,8 @@
+{
+    "testNodeTags" : ["p","div"],
+    "ignoredTags" : [],
+    "ignoredClasses" : [
+        "hide", "header", "sub-content", "page-anchor", "BF_WIDGET_1", 
+        "post-sponsor", "post-meta", "share", "comment"
+    ]
+}

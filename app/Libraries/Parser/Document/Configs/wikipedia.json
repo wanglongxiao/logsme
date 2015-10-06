@@ -1,0 +1,5 @@
+{
+    "testNodeTags" : ["p"],
+    "ignoredTags" : [],
+    "ignoredClasses" : ["infobox"]
+}

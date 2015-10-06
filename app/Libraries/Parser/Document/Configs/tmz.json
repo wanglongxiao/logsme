@@ -1,0 +1,7 @@
+{
+    "testNodeTags" : ["p", "div", "article"],
+    "ignoredTags" : [],
+    "ignoredClasses" : [
+        "masthead", "featured-stories-widget", "comment", "around-the-web-widget", "taboola", "votelink"
+    ]
+}
