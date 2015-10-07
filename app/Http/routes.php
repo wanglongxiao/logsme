@@ -19,16 +19,16 @@ Route::get('/', function () {
 
 Route::get('/', 'PostController@getList');
 
-Route::get('post/{id}', 'PostController@getPost');
+Route::get('/post/{id}', 'PostController@getPost');
 
-Route::any('fetch', 'PostController@fetchPost');
+Route::any('/fetch', 'PostController@fetchPost');
 
-Route::get('delete/{id}', 'PostController@deletePost');
+Route::get('/delete/{id}', 'PostController@deletePost');
 
-Route::get('bookmarklet',  function(){
+Route::get('/bookmarklet',  function(){
    return view('bookmarklet');
 });
 
-Route::post('create', 'PostController@createPost');
+Route::post('/create', 'PostController@createPost');
 	
-Route::post('update', 'PostController@updatePost');
+Route::post('/update', 'PostController@updatePost');

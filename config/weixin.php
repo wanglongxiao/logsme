@@ -19,15 +19,21 @@ return [
 		'5' => '22:00:00',
 		'6' => '09:00:00',
 	],
-	
+
+	/*
+	|--------------------------------------------------------------------------
+	| Weixin API Related
+	|--------------------------------------------------------------------------
+	*/
+		
 	// AppID
-	'appid' => "",
+	'appid' => env('WX_APPID', ''),
 
 	// AppSecret
-	'appsecret' => "",
+	'appsecret' => env('WX_APPSECRET', ''),
 	
-	// Weixin admin openid : @AW
-	'adminopenid' => "",
-	
-	
+	// Weixin admin openid
+	'adminopenid' => env('WX_ADMINOPENID', ''),
+
+
 ];

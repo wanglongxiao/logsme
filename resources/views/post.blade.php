@@ -37,10 +37,10 @@ if (isset($data)) {
 
 
 if ($id != "") {
-	$action = "update";
+	$action = "/update";
 } else if ( isset($url) && $url != "") {
-	$action = "create";
-} else $action = "fetch";
+	$action = "/create";
+} else $action = "/fetch";
 
 
 ?>

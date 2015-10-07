@@ -44,8 +44,8 @@
 					@endif
 					<span style="float:right;">
 						<a href="#" data-toggle="modal" data-target="#basicModal-{{ $item->id }}">[View]</a>  
-   						<a href='post/{{ $item->id }}'>[ Edit ]</a>  
-						<a href='delete/{{ $item->id }}'>[ Delete ]</a>
+   						<a href='/post/{{ $item->id }}'>[ Edit ]</a>  
+						<a href='/delete/{{ $item->id }}'>[ Delete ]</a>
 					</span>
 				</p>
 	 		</div>

@@ -3,7 +3,7 @@
 @include('navbar')
 
 <?php 
-$hosturl = "www.logs.me";
+$hosturl = env('DOMAINNAME');
 ?>
 
 	<div class="container">
