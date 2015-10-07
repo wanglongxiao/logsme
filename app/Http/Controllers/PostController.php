@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use App\Models\Post;
+use App\libraries\Parser\Document;
 
 class PostController extends Controller
 {
@@ -255,7 +256,7 @@ class PostController extends Controller
     		$context = stream_context_create($options);
     		$content = file_get_contents($url, false, $context);
     
-    		$doc = new \App\libraries\Parser\Document($content);
+    		$doc = new Document($content);
     		$res = $doc->parseContent(false, null);
     		if ($res['okay']) {
     			$images = $res['images'];
