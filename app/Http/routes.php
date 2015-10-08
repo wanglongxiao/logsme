@@ -33,4 +33,4 @@ Route::post('/create', 'PostController@createPost');
 	
 Route::post('/update', 'PostController@updatePost');
 
-Route::get('/weixin/wxhandling', 'WeixinController@handleWechat');
+Route::any('/weixinapi/wxhandling', 'WeixinController@handleWechat');
