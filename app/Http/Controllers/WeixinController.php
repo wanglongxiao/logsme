@@ -534,7 +534,6 @@ class WeixinController extends Controller
 	}
 	
 	/*
-	
 	// 获取素材总数
 	$api->get_material_count();
 	
@@ -553,11 +552,9 @@ class WeixinController extends Controller
 			'content' => '图文消息的具体内容',
 			'content_source_url' => 'http://www.diandian.com/'
 	), 1);
-	
 	*/
 	
 	/*
-	
 	自定义菜单创建接口
 	
 	$api->create_menu('
