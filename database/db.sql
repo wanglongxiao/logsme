@@ -71,6 +71,7 @@ CREATE TABLE `wxmedia` (
   `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   `updated_at` TIMESTAMP DEFAULT 0,
   `iskeep` tinyint(1) NOT NULL DEFAULT 0,
+  `inpreview` tinyint(1) NOT NULL DEFAULT 0,
   `issent` tinyint(1) NOT NULL DEFAULT 0,
   `sent_at` TIMESTAMP DEFAULT 0,
   PRIMARY KEY (`id`),

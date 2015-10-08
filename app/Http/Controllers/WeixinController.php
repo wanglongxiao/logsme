@@ -21,31 +21,29 @@ class WeixinController extends Controller
 	const ITEMS_PER_SUBMIT = 1;
 	
 	/*
-	// Token(令牌)
-	$token = 'gaoming13';
-	// EncodingAESKey(消息加解密密钥)
-	$encodingAESKey = '072vHYArTp33eFwznlSvTRvuyOTe5YME1vxSoyZbzaV';
-	
 	// 这是使用了Memcached来保存access_token
 	$m = new Memcached();
 	$m->addServer('localhost', 11211);
 	*/
 
 	/**
-	 * Responds to requests to api object
+	 * create wechat object
 	 */
 	public static function getWechat()
 	{	
 		// wechat模块 - 处理用户发送的消息和回复消息
 		$wechat = new Wechat(array(     
-		    'appId' => $appId,  
-		    'token' =>  $token,
-		    'encodingAESKey' => $encodingAESKey
+		    'appId' => Config::get("weixin.appid"), 
+			// Token(令牌)
+		    'token' =>  Config::get("weixin.wxtoken"),
+			// EncodingAESKey(消息加解密密钥)
+		    'encodingAESKey' => Config::get("weixin.wxaeskey")
 		));
+		return $wechat;
 	}
 
 	/**
-	 * Responds to requests to api object
+	 * create api object
 	 */
 	public static function getApi()
 	{
@@ -77,6 +75,40 @@ class WeixinController extends Controller
 		);
 
 		return $api;
+	}
+	
+	/**
+	 * Responds to handle wechat Msgs
+	 */
+	public function handleWechat()
+	{
+		$wechat = self::getWechat();
+		
+	    // 获取微信消息
+	    $msg = $wechat->serve();
+	
+	    // 默认消息
+	    $default_msg = "/微笑  欢迎关注本测试号:\n 回复1: 回复文本消息\n 回复2: 回复图片消息\n 回复3: 回复语音消息\n 回复4: 回复视频消息\n 回复5: 回复音乐消息\n 回复6: 回复图文消息";
+	    
+	    // 用户关注微信号后 - 回复用户普通文本消息
+	    if ($msg->MsgType == 'event' && $msg->Event == 'subscribe') {
+	        $wechat->reply($default_msg);
+	        exit();
+	    }
+	
+	    // 用户回复1 - 回复文本消息
+	    if ($msg->MsgType == 'text' && $msg->Content == '1') {
+	        $wechat->reply("hello world!");
+	        /* 也可使用这种数组方式回复
+	        $wechat->reply(array(
+	            'type' => 'text',
+	            'content' => 'hello world!'
+	        ));
+	        */
+	        exit();
+	    }
+	    // 默认回复默认信息
+	    $wechat->reply($default_msg);
 	}
 
 	/**
@@ -340,6 +372,12 @@ class WeixinController extends Controller
 			
 			// Send preview to @AW
 			//$res = $api->sendPreview ($newsid, Config::get("weixin.adminopenid"));
+			// Update Wxmedia to 'inpreview = 1'
+			$data = array(
+				'newsid' => $newsid,
+				'inpreview' => 1
+			);
+			//$res = WxmediaController::updateWxmedia($data);
 					
 			return $newsid;
 		}
@@ -411,6 +449,7 @@ class WeixinController extends Controller
 		if ($groupid == "all") {
 			$data = array(
 					'newsid' => $newsid,
+					'inpreview' => 0,
 					'issent' => 1,
 					'sent_at' => $day." 00:00:00"
 			);
@@ -547,38 +586,5 @@ class WeixinController extends Controller
 	
 	$api->get_selfmenu();
 	*/
-
-	/**
-	 * Responds to requests to api access token
-	 */
-	private function getAccessToken()
-	{
-		// Token API
-		$tokenApi = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=".$this->appId."&secret=".$this->appSecret;
-		// curl
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, $tokenApi);
-		//curl_setopt($ch, CURLOPT_HEADER, TRUE);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-		$res = curl_exec($ch);
-		//$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-		curl_close($ch);
-	
-		// 异常处理: 获取access_token网络错误
-		if ($res === false) {
-			@error_log('Http Get AccessToken Error.', 0);
-			return false;
-		}
-	
-		// 异常处理: access_token获取失败
-		if (!isset($res->access_token)) {
-			@error_log('Get AccessToken Error: ' . json_encode($res), 0);
-			return false;
-		}
-	
-		$res = (array)json_decode ($res);
-		//echo $res["access_token"]."\n".$res["expires_in"]."\n";
-		return $res;
-	}
 
 }

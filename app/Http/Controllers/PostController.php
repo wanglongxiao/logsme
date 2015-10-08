@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use App\Models\Post;
-use App\libraries\Parser\Document;
 
 class PostController extends Controller
 {
@@ -219,11 +218,12 @@ class PostController extends Controller
     public function fetchPost(Request $request)
     {
     	$url = $request->url;
+    	
     	//TODO only support url with "http://" or "https://", check url is http/https or not
     	//echo "#### ".$url."<br>";
     	
-    	if ($url != null || $url != "") {
-	    	$res = $this->fetchDataFromUrl($url);
+    	if ($url != NULL && $url != "") {
+    		$res = $this->fetchDataFromUrl($url);
 	    	//var_dump($res);
 	    	if ($res !== false) {
 	    		//return response()->json($res);
@@ -256,7 +256,7 @@ class PostController extends Controller
     		$context = stream_context_create($options);
     		$content = file_get_contents($url, false, $context);
     
-    		$doc = new Document($content);
+    		$doc = new \App\Libraries\Parser\Document($content);
     		$res = $doc->parseContent(false, null);
     		if ($res['okay']) {
     			$images = $res['images'];

@@ -53,7 +53,7 @@ class DailyPush extends Command
     	
     	//$newsid = "ggmD3LwrOfOVaF8ty9nzg-xKV3u1JlN6Fyd-6Xj4qiY";
     	//$weixin->sendPushMsg($newsid, 100, false);
-    	$weixin->sendPushMsg();
+    	//$weixin->sendPushMsg();
     	
     	//WxmediaController::deleteWxmedia($newsid);
     }

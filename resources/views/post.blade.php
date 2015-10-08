@@ -55,7 +55,7 @@ if ($id != "") {
 	
 		<input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
 
-@if ($action == "fetch")
+@if ($action == "/fetch")
 		
 		<div class="form-group"> </div>
 		<div class="form-group">
@@ -65,8 +65,8 @@ if ($id != "") {
 		
 @else
 
-	@if ($action == "../update")
-		<button type="button" class="btn btn-primary" onClick="window.location.href='../fetch?url={{ $url }}'">ReFetch Url</button>
+	@if ($action == "/update")
+		<button type="button" class="btn btn-primary" onClick="window.location.href='/fetch?url={{ $url }}'">ReFetch Url</button>
 		<span style="float:right;">
 					@if ($isapproved == 0)
 					<span class="label label-default">NotApprove</span>
@@ -174,7 +174,7 @@ if ($id != "") {
 	</div>
 </div>
 
-@if ($action != "fetch")
+@if ($action != "/fetch")
 
 	<script src="//cdn.ckeditor.com/4.5.3/standard/ckeditor.js"></script>
 	

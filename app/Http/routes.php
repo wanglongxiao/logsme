@@ -32,3 +32,5 @@ Route::get('/bookmarklet',  function(){
 Route::post('/create', 'PostController@createPost');
 	
 Route::post('/update', 'PostController@updatePost');
+
+Route::any('/weixin/wxhandling', 'WeixinController@handleWechat');

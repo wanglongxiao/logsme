@@ -35,5 +35,11 @@ return [
 	// Weixin admin openid
 	'adminopenid' => env('WX_ADMINOPENID', ''),
 
+	// Weixin callback token
+	'wxtoken' => env('WX_TOKEN', ''),
+		
+	// Weixin callback AESKey
+	'wxaeskey' => env('WX_AESKEY', ''),
+
 
 ];
