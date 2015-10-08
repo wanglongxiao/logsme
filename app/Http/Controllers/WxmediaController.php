@@ -95,6 +95,42 @@ class WxmediaController extends Controller
     }
     
     /**
+     * Hide newsid on Weixin. For housekeeping, as 5000 mediaids limitation
+     */
+    public static function HideWxmedia($newsid)
+    {
+    	if ($newsid != null || $newsid != "") {
+    		
+	    	// get this wxmedia and remove it from Weixin
+	    	$res = self::getWxmedia($newsid);
+	   		if (isset($res) && is_array($res)) {
+	   			$postids = (array) json_decode($res['postids']);
+	   			$thumbids = (array) json_decode($res['thumbids']);
+    			$mediaids = (array) json_decode($res['mediaids']);
+	    			 
+	    		// remove mediaids (thumb / image / news) from Weixin
+	    		$api = WeixinController::getApi();
+	   			 
+	   			foreach ($thumbids as $thumbmediaid) {
+	   				$api->del_material($thumbmediaid);
+	   			}
+    			foreach ($mediaids as $mediaid) {
+	    			$api->del_material($mediaid);
+	    		}
+	    		$api->del_material($newsid);
+	       
+	    		// update the record from table 'wxmedia'
+	    		$data = array(
+					'newsid' => $newsid,
+					'hideonwx' => 1
+				);
+				self::updateWxmedia($data);
+	    	} 
+	    } 
+    	return true;
+    }
+    
+    /**
      * Delete Multi rows
      */
     public static function deleteByIds($newsids)

@@ -20,6 +20,8 @@ class WeixinController extends Controller
 	
 	// Post count of Per Day Msg (exclude the featured Post)
 	const ITEMS_PER_SUBMIT = 1;
+	// Keep N newsids on Weixin side
+	const ITEMS_KEEP_ON_WEIXIN = 50;
 	
 	/*
 	// 这是使用了Memcached来保存access_token
@@ -49,7 +51,7 @@ class WeixinController extends Controller
 	public static function getApi()
 	{
 		// api模块 - 包含各种系统主动发起的功能
-		$api = new \App\libraries\Weixin\Api(
+		$api = new Api(
 		    array(
 		        'appId' => Config::get("weixin.appid"),
 		        'appSecret' => Config::get("weixin.appsecret"),
@@ -90,7 +92,7 @@ class WeixinController extends Controller
 	    
 	
 	    // 默认消息
-	    $default_msg = "/微笑  欢迎关注 “海外视频精选” :\n 本公众号仍在紧张的开发测试中 ..\n 将于2015年10月中旬上线\n 将用最新最有趣的内容带给您每天的快乐\n 请广传，多谢 ！";
+	    $default_msg = "/微笑 多谢关注－海外视频精选\n 本公众号仍在开发测试中.. 将于2015年10月底上线\n 每天都将带给您最新、最有趣的内容。请广传 ！";
 	    
 	    // 用户关注微信号后 - 回复用户普通文本消息
 	    if ($msg->MsgType == 'event' && $msg->Event == 'subscribe') {
@@ -113,13 +115,17 @@ class WeixinController extends Controller
 	    // 管理员用户回复CMD - 触发 每日图文群发事件
 	    // gogo all , 群发全部
 	    // gogo test , 群发到测试组
-	    if ($msg->fromUser == Config::get("weixin.adminopenid") && $msg->MsgType == 'text' && stripos($msg->Content, 'gogo') !== false) {
+	    //Log::error('openid: '.$msg->FromUserName);
+	    if ($msg->FromUserName == Config::get("weixin.adminopenid") && $msg->MsgType == 'text' && stripos($msg->Content, 'gogo') !== false) {
 	    	$cmdarr = explode(" ", $msg->Content);
-	    	if ($cmdarr[1] == "all") {
-	    		//self::sendPushMsg();
-	    		Log::info('Sent to all users. ');
-	    	} else if ($cmdarr[1] == "test") {
-	    		self::sendPushMsg("", 100, false);
+	    	if (isset($cmdarr) && is_array($cmdarr) && count($cmdarr) >= 2) {
+		    	if ($cmdarr[1] == "all") {
+		    		self::sendPushMsg();
+		    		Log::error('Sent news to all users. ');
+		    	} else if ($cmdarr[1] == "test") {
+		    		self::sendPushMsg("", Config::get("weixin.wxtestergroup"), false);
+		    		Log::error('Sent news to test group. ');
+		    	}
 	    	}
 	    	exit();
 	    }
@@ -302,101 +308,116 @@ class WeixinController extends Controller
 	{
 		$api = self::getApi();
 		
-		// get 1 featured post from DB Post table
-		$data = array();
+		// if have issent=0 and inpreview=1 news already, no need to gen news again
 		$terms = array(
-				'isapproved' => 1,
-				'ispublished' => 0,
-				'isfeatured' => 1,
-				'hasvideo' => 0
-		);
-		$data1 = PostController::getListByFilter($terms, 1);
-		if (!$data1->isEmpty() && isset($data1[0]['attributes']))
-			array_push($data, $data1[0]['attributes']);
-		// get non-featured post from DB Post table
-		$terms = array(
-				'isapproved' => 1,
-				'ispublished' => 0,
-				'isfeatured' => 0,
-				'hasvideo' => 0
-		);
-		$data2 = PostController::getListByFilter($terms, self::ITEMS_PER_SUBMIT);
-		if (!$data2->isEmpty() && isset($data2[0]['attributes'])) {
-			foreach ($data2 as $data2item) {
-				array_push($data, $data2item['attributes']);
-			}
-		}	
-		
-		// Upload thumb, submit news and get newsId
-		$postids = array();
-		$thumbids = array();
-		$mediaids = array();
-		$news = array();
-		foreach ($data as $item) {
-			//$item ['$sourcedomain'];
-			$html = "";
-			$itemMediaids = array();
-			$contentRes = self::convertToWxContent($item ['content']);
-			$html = $contentRes[0];
-			$itemMediaids = $contentRes[1];
-			// Make a Weixin allowed content format. 
-			// Keep <p><img><br><video>only, upload all images to Weixin domains
-			// upload thumb
-			$createMediaRes = self::createMedia($item ['ogimage']);
-			$thumbmediaid = $createMediaRes[0];
-			// gen newsitem
-			$newsitem = array(
-					'title' => $item ['title'],
-					'thumb_media_id' => $thumbmediaid,
-					'author' => '',
-					'digest' => $item ['description'],
-					'show_cover_pic' => 0,
-					'content' => $html,
-					// update later by config
-					'content_source_url' => "http://logs.me/p/".$item ['id']
-			);
-			array_push($postids, $item ['id']);
-			array_push($thumbids, $thumbmediaid);
-			array_push($news, $newsitem);
-			$mediaids = array_merge($mediaids, $itemMediaids);
-		}
-		
-		// submit news
-		$res = $api->add_news($news);
-		//var_dump($res);
-		
-		// handle result
-		if ($res[0] == "NULL") {
-			// rollback uploaded thumbnails
-			foreach ($thumbids as $thumbmediaid) {
-				$api->del_material($thumbmediaid);
-			}
-			foreach ($mediaids as $mediaid) {
-				$api->del_material($mediaid);
-			}
-			return FALSE;
-			
-		} else {
-			$newsid = $res[1]->media_id;
-			// Update wxmedia table
-			WxmediaController::createWxmedia($newsid, $postids, $thumbids, $mediaids);
-			
-			// Update post table 'isublished'
-			$terms = array(
-				'ispublished' => 1
-			);
-			PostController::updateByIds($terms, $postids);
-			
-			// Send preview to @AW
-			//$res = $api->sendPreview ($newsid, Config::get("weixin.adminopenid"));
-			// Update Wxmedia to 'inpreview = 1'
-			$data = array(
-				'newsid' => $newsid,
+				'issent' => 0,
 				'inpreview' => 1
+		);
+		$res = WxmediaController::getWxmediaByFilter($terms, 1, 0, 'created_at', 'asc');
+		if (!$res->isEmpty() && isset($res[0]['attributes'])) {
+			$newsid = $res[0]['attributes']['newsid'];
+			// Send preview to @AW
+			$res = $api->sendPreview ($newsid, Config::get("weixin.adminopenid"));
+			$api->send(Config::get("weixin.adminopenid"), "ERR：仍有未发送图文，请发送");
+		} else {
+		
+			// get 1 featured post from DB Post table
+			$data = array();
+			$terms = array(
+					'isapproved' => 1,
+					'ispublished' => 0,
+					'isfeatured' => 1,
+					'hasvideo' => 0
 			);
-			//$res = WxmediaController::updateWxmedia($data);
-					
-			return $newsid;
+			$data1 = PostController::getListByFilter($terms, 1);
+			if (!$data1->isEmpty() && isset($data1[0]['attributes']))
+				array_push($data, $data1[0]['attributes']);
+			// get non-featured post from DB Post table
+			$terms = array(
+					'isapproved' => 1,
+					'ispublished' => 0,
+					'isfeatured' => 0,
+					'hasvideo' => 0
+			);
+			$data2 = PostController::getListByFilter($terms, self::ITEMS_PER_SUBMIT);
+			if (!$data2->isEmpty() && isset($data2[0]['attributes'])) {
+				foreach ($data2 as $data2item) {
+					array_push($data, $data2item['attributes']);
+				}
+			}	
+			
+			// Upload thumb, submit news and get newsId
+			$postids = array();
+			$thumbids = array();
+			$mediaids = array();
+			$news = array();
+			foreach ($data as $item) {
+				//$item ['$sourcedomain'];
+				$html = "";
+				$itemMediaids = array();
+				$contentRes = self::convertToWxContent($item ['content']);
+				$html = $contentRes[0];
+				$itemMediaids = $contentRes[1];
+				// Make a Weixin allowed content format. 
+				// Keep <p><img><br><video>only, upload all images to Weixin domains
+				// upload thumb
+				$createMediaRes = self::createMedia($item ['ogimage']);
+				$thumbmediaid = $createMediaRes[0];
+				// gen newsitem
+				$newsitem = array(
+						'title' => $item ['title'],
+						'thumb_media_id' => $thumbmediaid,
+						'author' => '',
+						'digest' => $item ['description'],
+						'show_cover_pic' => 0,
+						'content' => $html,
+						// update later by config
+						'content_source_url' => "http://".env('DOMAINNAME')."/post/".$item ['id']
+				);
+				array_push($postids, $item ['id']);
+				array_push($thumbids, $thumbmediaid);
+				array_push($news, $newsitem);
+				$mediaids = array_merge($mediaids, $itemMediaids);
+			}
+			
+			// submit news
+			$res = $api->add_news($news);
+			//var_dump($res);
+			
+			// handle result
+			if ($res[0] == "NULL") {
+				// rollback uploaded thumbnails
+				foreach ($thumbids as $thumbmediaid) {
+					$api->del_material($thumbmediaid);
+				}
+				foreach ($mediaids as $mediaid) {
+					$api->del_material($mediaid);
+				}
+				return FALSE;
+				
+			} else {
+				$newsid = $res[1]->media_id;
+				// Update wxmedia table
+				WxmediaController::createWxmedia($newsid, $postids, $thumbids, $mediaids);
+				
+				// Update post table 'isublished'
+				$terms = array(
+					'ispublished' => 1
+				);
+				PostController::updateByIds($terms, $postids);
+				
+				// Send preview to @AW
+				$res = $api->sendPreview ($newsid, Config::get("weixin.adminopenid"));
+				$api->send(Config::get("weixin.adminopenid"), "INFO：请预览此图文");
+				// Update Wxmedia to 'inpreview = 1'
+				$data = array(
+					'newsid' => $newsid,
+					'inpreview' => 1
+				);
+				$res = WxmediaController::updateWxmedia($data);
+						
+				return $newsid;
+			}
 		}
 	}
 	
@@ -409,7 +430,7 @@ class WeixinController extends Controller
 	 * -> tell AW daily pushed by Weixin
 	 * 
 	 * $newsid = "", push the oldest "issent = 0" news to Weixin
-	 * $groupid = "all", push to all users (tester groupid = 100)
+	 * $groupid = "all", push to all users ; tester groupid , Config::get("weixin.wxtestergroup")
 	 * $triggerFromCron = true, cronjob triggered once per day ; set to false can be trigger maually
 	 */
 	public function sendPushMsg($newsid = "", $groupid = "all", $triggerFromCron = true)
@@ -420,7 +441,8 @@ class WeixinController extends Controller
 		//if not given newsid, get the oldest 'isset = 0' newsid
 		if (!isset($newsid) || $newsid == "") {
 			$terms = array(
-					'issent' => 0
+					'issent' => 0,
+					'inpreview' => 1
 			);
 			$res = WxmediaController::getWxmediaByFilter($terms, 1, 0, 'created_at', 'asc');
 			if (!$res->isEmpty() && isset($res[0]['attributes'])) {
@@ -428,7 +450,7 @@ class WeixinController extends Controller
 			} else {
 				// send Msg to @AW, no news can be pushed
 				echo "No news available \n";
-				$api->send(Config::get("weixin.adminopenid"), "No Available News");
+				$api->send(Config::get("weixin.adminopenid"), "ERR：没有可用图文");
 				return false;
 			}
 		}
@@ -452,14 +474,14 @@ class WeixinController extends Controller
 			
 			// judge reach the sending schedule
 			if ($canPush && time() > $scheduledTime) {
-				//$res = $api->sendMsgToGroup ($newsid, $groupid);
-				echo "auto push done \n";
+				$res = $api->sendMsgToGroup ($newsid, $groupid);
+				//echo "auto push done \n";
 			} else {
-				//return false;
+				return false;
 			}
 		} else {
-			//$res = $api->sendMsgToGroup ($newsid, $groupid);
-			echo "manual push done \n";
+			$res = $api->sendMsgToGroup ($newsid, $groupid);
+			//echo "manual push done \n";
 		}
 		
 		// if push msg to 'all', update wxmedia table. Set this newsid can not be pushed again
@@ -470,7 +492,7 @@ class WeixinController extends Controller
 					'issent' => 1,
 					'sent_at' => $day." 00:00:00"
 			);
-			//$res = WxmediaController::updateWxmedia($data);
+			$res = WxmediaController::updateWxmedia($data);
 			// default : 0000-00-00 00:00:00
 		}
 		
@@ -479,21 +501,37 @@ class WeixinController extends Controller
 			'lastpush_time' => $day." 00:00:00"
 		);
 		if ($groupid == "all") {
-			//UserController::updateByGroups($data);
+			UserController::updateByGroups($data);
 			echo "group all \n";
 		} else {
-			//UserController::updateByGroups($data, array($groupid));
+			UserController::updateByGroups($data, array($groupid));
 			echo "group $groupid \n";
 		}
 		
 		// send Msg to @AW, daily push done
-		$api->send(Config::get("weixin.adminopenid"), "News Sent To All ".$day);
+		$api->send(Config::get("weixin.adminopenid"), "INFO：图文消息已发送，".$day);
 		
 		return true;
 	}
 
-
-
+	/**
+	 * Weixin housekeeping, as 5000 mediaids limitation
+	 */
+	public function wxHouseKeeping($count = self::ITEMS_KEEP_ON_WEIXIN)	
+	{
+		$terms = array(
+			'issent' => 1,
+			'hideonwx' => 0
+		);
+		$res = WxmediaController::getWxmediaByFilter($terms, 100, $count, 'sent_at', 'desc');
+		if (!$res->isEmpty() && isset($res[0]['attributes']['newsid'])) {
+			foreach ($res as $newitem) {
+				$newsid = $newitem['attributes']['newsid'];
+				WxmediaController::HideWxmedia($newsid);
+			}
+		}
+		return true;
+	}
 	
 	/*
 	
@@ -519,17 +557,6 @@ class WeixinController extends Controller
 	*/
 	
 	/*
-
-	
-	
-	// 获取微信消息
-	$msg = $wechat->serve();
-	
-	// 被动回复用户消息
-	$wechat->reply('这是我被动发送的消息！');
-	
-	// 主动发送文本消息
-	$api->send($msg->FromUserName, '这是我主动发送的消息！');
 	
 	自定义菜单创建接口
 	

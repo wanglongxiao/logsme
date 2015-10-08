@@ -40,6 +40,9 @@ return [
 		
 	// Weixin callback AESKey
 	'wxaeskey' => env('WX_AESKEY', ''),
+	
+	// Weixin callback AESKey
+	'wxtestergroup' => env('WX_TESTERGROUP', 100),
 
 
 ];

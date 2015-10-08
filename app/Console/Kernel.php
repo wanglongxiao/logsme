@@ -15,7 +15,8 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         \App\Console\Commands\Inspire::class,
     	// register custom commands
-    	\App\Console\Commands\DailyPush::class
+    	\App\Console\Commands\DailyGen::class,
+    	\App\Console\Commands\HourlyPush::class
     ];
 
     /**
