@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Config;
+use Log;
 use App\Http\Controllers\WeixinController;
 use App\Http\Controllers\WxmediaController;
 
