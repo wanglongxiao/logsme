@@ -213,10 +213,15 @@ class WeixinController extends Controller
 			if ($err == 'NULL') {
 				return FALSE;
 			} else {
-				$res = (array)$res;
-				//echo $res['media_id']." \n";
-				return array($res['media_id'], $res["url"]);
+				if ($res != NULL && $res != 'NULL') {
+					$res = (array)$res;
+					//echo $res['media_id']." \n";
+					return array($res['media_id'], $res["url"]);
+				} else {
+					return FALSE;
+				}
 			}
+			
 		} else {
 			Log::error('Media size > 1M, skipped: '.$remoteurl);
 			return FALSE;
@@ -231,10 +236,12 @@ class WeixinController extends Controller
 	{
 		$allowMinRatio = 0.25;
 		
-		if(filter_var($remoteurl, FILTER_VALIDATE_URL) === FALSE)
+		//if(filter_var($remoteurl, FILTER_VALIDATE_URL) === FALSE)
+		if (FALSE)
 		{
+			// can not handle url like : http://www.teepr.com/wp-content/uploads/2015/10/模特兒.png
 			return FALSE;
-		}else{
+		} else{
 			$ext = pathinfo($remoteurl, PATHINFO_EXTENSION);
 			$tmpFile = "/tmp/".time().".".$ext;
 			//echo "tmpFile: ".$tmpFile."\n";
@@ -336,7 +343,7 @@ class WeixinController extends Controller
 					'isfeatured' => 1,
 					'hasvideo' => 0
 			);
-			$data1 = PostController::getListByFilter($terms, 1);
+			$data1 = PostController::getListByFilter($terms, 1, 0, 'created_at', 'asc');
 			if (!$data1->isEmpty() && isset($data1[0]['attributes']))
 				array_push($data, $data1[0]['attributes']);
 			// get non-featured post from DB Post table
@@ -346,7 +353,7 @@ class WeixinController extends Controller
 					'isfeatured' => 0,
 					'hasvideo' => 0
 			);
-			$data2 = PostController::getListByFilter($terms, self::ITEMS_PER_SUBMIT);
+			$data2 = PostController::getListByFilter($terms, self::ITEMS_PER_SUBMIT, 0, 'created_at', 'asc');
 			if (!$data2->isEmpty() && isset($data2[0]['attributes'])) {
 				foreach ($data2 as $data2item) {
 					array_push($data, $data2item['attributes']);
@@ -369,7 +376,9 @@ class WeixinController extends Controller
 				// Keep <p><img><br><video>only, upload all images to Weixin domains
 				// upload thumb
 				$createMediaRes = self::createMedia($item ['ogimage']);
+				// ToDo: Judge thumb upload failed or not
 				$thumbmediaid = $createMediaRes[0];
+				
 				// gen newsitem
 				$newsitem = array(
 						'title' => $item ['title'],
@@ -381,6 +390,7 @@ class WeixinController extends Controller
 						// update later by config
 						'content_source_url' => "http://".env('DOMAINNAME')."/post/".$item ['id']
 				);
+				
 				array_push($postids, $item ['id']);
 				array_push($thumbids, $thumbmediaid);
 				array_push($news, $newsitem);
