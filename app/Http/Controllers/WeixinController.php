@@ -199,20 +199,27 @@ class WeixinController extends Controller
 		$api = self::getApi();
 		
 		$tmpFile = self::copyResizeRemoteImage($remoteurl);
+		
+		//check filesize is < 1M (1048576 bytes) , Weixin Limitation
+		if (filesize($tmpFile) >= 1000000) {
 			
-		if ($type == 'video') {
-			list($err, $res) = $api->add_material($type, $tmpFile, $vidtitle, $viddesc);
+			if ($type == 'video') {
+				list($err, $res) = $api->add_material($type, $tmpFile, $vidtitle, $viddesc);
+			} else {
+				list($err, $res) = $api->add_material($type, $tmpFile);
+				//var_dump($res);
+				//var_dump($err);
+			}
+			if ($err == 'NULL') {
+				return FALSE;
+			} else {
+				$res = (array)$res;
+				//echo $res['media_id']." \n";
+				return array($res['media_id'], $res["url"]);
+			}
 		} else {
-			list($err, $res) = $api->add_material($type, $tmpFile);
-			//var_dump($res);
-			//var_dump($err);
-		}
-		if ($err == 'NULL') {
+			Log::error('Media size > 1M, skipped: '.$remoteurl);
 			return FALSE;
-		} else {
-			$res = (array)$res;
-			//echo $res['media_id']." \n";
-			return array($res['media_id'], $res["url"]);
 		}
 	}
 	
@@ -220,9 +227,9 @@ class WeixinController extends Controller
 	 * Copy and resize image from remote url. Weixin recommendation : <1M , 900 * 500
 	 * 
 	 */
-	public static function copyResizeRemoteImage($remoteurl, $maxWidth = 1000)
+	public static function copyResizeRemoteImage($remoteurl, $maxWidth = 800)
 	{
-		$allowMinRatio = 0.3;
+		$allowMinRatio = 0.25;
 		
 		if(filter_var($remoteurl, FILTER_VALIDATE_URL) === FALSE)
 		{
