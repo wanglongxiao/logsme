@@ -7,6 +7,7 @@ use Illuminate\Routing\Controller;
 use Sunra\PhpSimple\HtmlDomParser;
 use Cache;
 use Config;
+use Log;
 use App\Models\Post;
 use App\Models\User;
 use App\Models\Wxmedia;
@@ -86,9 +87,10 @@ class WeixinController extends Controller
 		
 	    // 获取微信消息
 	    $msg = $wechat->serve();
+	    
 	
 	    // 默认消息
-	    $default_msg = "/微笑  欢迎关注本测试号:\n 回复1: 回复文本消息\n 回复2: 回复图片消息\n 回复3: 回复语音消息\n 回复4: 回复视频消息\n 回复5: 回复音乐消息\n 回复6: 回复图文消息";
+	    $default_msg = "/微笑  欢迎关注 “海外视频精选” :\n 本公众号仍在紧张的开发测试中 ..\n 将于2015年10月中旬上线\n 将用最新最有趣的内容带给您每天的快乐\n 请广传，多谢 ！";
 	    
 	    // 用户关注微信号后 - 回复用户普通文本消息
 	    if ($msg->MsgType == 'event' && $msg->Event == 'subscribe') {
@@ -107,6 +109,21 @@ class WeixinController extends Controller
 	        */
 	        exit();
 	    }
+	    
+	    // 管理员用户回复CMD - 触发 每日图文群发事件
+	    // gogo all , 群发全部
+	    // gogo test , 群发到测试组
+	    if ($msg->fromUser == Config::get("weixin.adminopenid") && $msg->MsgType == 'text' && stripos($msg->Content, 'gogo') !== false) {
+	    	$cmdarr = explode(" ", $msg->Content);
+	    	if ($cmdarr[1] == "all") {
+	    		//self::sendPushMsg();
+	    		Log::info('Sent to all users. ');
+	    	} else if ($cmdarr[1] == "test") {
+	    		self::sendPushMsg("", 100, false);
+	    	}
+	    	exit();
+	    }
+	    
 	    // 默认回复默认信息
 	    $wechat->reply($default_msg);
 	}
