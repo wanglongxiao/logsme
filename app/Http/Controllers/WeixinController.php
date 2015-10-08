@@ -201,7 +201,7 @@ class WeixinController extends Controller
 		$tmpFile = self::copyResizeRemoteImage($remoteurl);
 		
 		//check filesize is < 1M (1048576 bytes) , Weixin Limitation
-		if (filesize($tmpFile) >= 1000000) {
+		if (filesize($tmpFile) <= 1000000) {
 			
 			if ($type == 'video') {
 				list($err, $res) = $api->add_material($type, $tmpFile, $vidtitle, $viddesc);
