@@ -8,22 +8,21 @@ use Log;
 use App\Http\Controllers\WeixinController;
 use App\Http\Controllers\WxmediaController;
 
-class DailyGen extends Command
+class CreateMenu extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    //protected $signature = 'weixin:dailygen {user}';
-	protected $signature = 'weixin:dailygen';
+    protected $signature = 'weixin:createmenu';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Weixin Daily Job. SyncUser -> SubmitNews -> SendPreview to admin openid';
+    protected $description = 'Delete existed menu and create a new one';
 
     /**
      * Create a new command instance.
@@ -43,18 +42,7 @@ class DailyGen extends Command
     public function handle()
     {
         //
-        //$user = $this->argument('user');
-        
-    	$weixin = new \App\Http\Controllers\WeixinController();
-    	
-    	//$weixin->syncUser(true);
-    	$weixin->syncUser();
-    	
-    	$newsid = $weixin->submitNews();
-    	Log::error('Create news: '.$newsid);
-    	
-    	$weixin->wxHouseKeeping();
-    	$cmd = "rm -rf /tmp/*";
-    	system($cmd);
+        $weixin = new \App\Http\Controllers\WeixinController();
+    	$weixin->createMenu();
     }
 }

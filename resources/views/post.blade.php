@@ -2,203 +2,51 @@
 
 @include('navbar')
 
+<?php
+// delete the \n of mysql
+$content = str_replace("&lt;","<",$data['content']);
+$content = str_replace("&gt;",">",$content);
+$content = str_replace("&amp;","&",$content);
+$content = str_replace("&quot;","'",$content);
+$content = str_replace("&nbsp;"," ",$content);
+
+// parser tags
+$tags = "";
+if ($data['tags'] != "") {
+	$tags = explode("," , $data['tags']);
+}
+?>
+
 <div class="container">
 	POST<br><br><br>
 </div>
 
-<?php
-
-$id = "";
-
-if (isset($data)) {
-	$id = (array_key_exists('id', $data))?$data ['id']:'';
-	$title = $data ['title'];
-	$description = $data ['description'];
-	$tags = (array_key_exists('tags', $data))?$data ['tags']:"";
-	$isfeatured = (array_key_exists('isfeatured', $data))?$data ['isfeatured']:0;
-	$ispublished = (array_key_exists('ispublished', $data))?$data ['ispublished']:0;
-	$isapproved = (array_key_exists('isapproved', $data))?$data ['isapproved']:0;
-	$thumbnail = (array_key_exists('thumbnail', $data))?$data ['thumbnail']:$data ['ogimage'];
-	$content = $data ['content'];
-	// delete the \n of mysql
-	$content = str_replace(chr(10)," ",$content);
-	$content = str_replace(chr(13)," ",$content);
-	$hasimage = (array_key_exists('hasImage', $data))?$data ['hasImage']:false;
-	$images = (array_key_exists('images', $data))?$data ['images']:array();
-	// get hasvideo from DB
-	if (array_key_exists('hasvideo', $data))
-		$hasvideo = $data ['hasvideo'];
-	// get hasvideo from Fetcher
-	else if (array_key_exists('hasVideo', $data))
-		$hasvideo = $data ['hasVideo'];
-	else $hasvideo = 0;
-	//$videos = $data ['videos'];
-}
-
-
-if ($id != "") {
-	$action = "/update";
-} else if ( isset($url) && $url != "") {
-	$action = "/create";
-} else $action = "/fetch";
-
-
-?>
-
 <div class="container">
-	<div class="panel panel-default">
-	<div class="panel-body">
+<!--  
+<img src='{{ $data['ogimage'] }}' width="320" class="img-thumbnail img-responsive">
+-->
 
-	<form action="{{ $action }}" name="myform" method="POST">
-	
-		<input type="submit" class="btn btn-primary">
-	
-		<input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
-
-@if ($action == "/fetch")
-		
-		<div class="form-group"> </div>
-		<div class="form-group">
-			<label>Post Ori Url</label> <input type="input" class="form-control"
-					name="url" id="url" placeholder="Please Input The Url" value="">
+<div class="panel panel-default">
+ 	<div class="panel-body">
+ 		
+ 		<div class="media">
+		  <div class="media-body">
+		  	<center>
+		    <h3 class="media-heading">{{ $data['title'] }}</h3>	    
+		    @if ($tags != 0)
+		    @foreach ($tags as $tag)
+		    	<a href="/tag/{{ $tag }}" style="float:right; margin:0 0 5px 5px;"><span class="label label-primary">{{ $alltags[$tag] }}</span></a>
+		    @endforeach
+		    @endif
+		    <hr>
+		    <?php echo $content; ?>
+		    </center>
+		  </div>
 		</div>
 		
-@else
-
-	@if ($action == "/update")
-		<button type="button" class="btn btn-primary" onClick="window.location.href='/fetch?url={{ $url }}'">ReFetch Url</button>
-		<span style="float:right;">
-					@if ($isapproved == 0)
-					<span class="label label-default">NotApprove</span>
-					@else
-					<span class="label label-warning">Approved</span>
-					@endif
-					@if ($ispublished == 0)
-					<span class="label label-default">NotPublish</span>
-					@else
-					<span class="label label-success">Published</span>
-					@endif
-					@if ($isfeatured == 0)
-					<span class="label label-default">NotFeature</span>
-					@else
-					<span class="label label-primary">Featured</span>
-					@endif
-					@if ($hasvideo == 0)
-					<span class="label label-default">NotVideo</span>
-					@else
-					<span class="label label-info">HasVideo</span>
-					@endif
-		</span>
-	@endif
-
-		<input type="hidden" name="url" id="url" value="{{ $url }}">
-		<input type="hidden" name="id" id="id" value="{{ $id }}">
-		
-		<div class="form-group"> </div>
-		<fieldset disabled>
-			<div class="form-group">
-				<label>Post Ori Url</label> <input type="input" class="form-control"
-					name="disabled-url" id="disabled-url" placeholder="Post Ori Url" value="{{ $url }}">
-			</div>
-		</fieldset>
-		<div class="form-group">
-			<label>Post Title</label> <input type="input" class="form-control"
-				name="title" id="title" placeholder="Post Title" value="{{ $title }}">
-		</div>
-		<div class="form-group">
-			<label>Post Description</label> <input type="input"
-				class="form-control" name="description" id="description" placeholder="Post Description"
-				value="{{ $description }}">
-		</div>
-		
-		<div class="form-group">
-			<label>Tags</label> <input type="input"
-				class="form-control" name="tags" id="tags" placeholder="Tags separated by ',' , such as 'a,b c,d'"
-				value="{{ $tags }}">
-		</div>
-		
-		<div class="form-group">
-			<label>Feature It ?</label>
-		</div>
-		<div class="form-group">
-		<label class="radio-inline"> <input type="radio"
-			name="isfeatured" id="isfeatured" value="0" <?php if ($isfeatured == 0) echo "checked"; ?>> No
-		</label>
-		<label class="radio-inline"> <input type="radio"
-			name="isfeatured" id="isfeatured" value="1" <?php if ($isfeatured == 1) echo "checked"; ?>> Yes
-		</label>
-		</div>
-		
-		<div class="form-group">
-			<label>Has Video ?</label>
-		</div>
-		<div class="form-group">
-		<label class="radio-inline"> <input type="radio"
-			name="hasvideo" id="hasvideo" value="0" <?php if ($hasvideo == 0) echo "checked"; ?>> No
-		</label>
-		<label class="radio-inline"> <input type="radio"
-			name="hasvideo" id="hasvideo" value="1" <?php if ($hasvideo == 1) echo "checked"; ?>> Yes
-		</label>
-		</div>
-		
-		<div class="form-group">
-			<label>Choose OG Image</label>
-		</div>
-		<div class="form-group">
-		<label class="radio-inline"> <input type="radio"
-			name="ogimage" id="ogimage" value="{{ $thumbnail }}" checked> <img src="{{ $thumbnail }}" width="160" alt="image" class="img-responsive">
-		</label> 
-	@if ($hasimage)
-		@foreach ($images as $image)		
-		<label class="radio-inline"> <input type="radio"
-			name="ogimage" id="ogimage" value="{{ $image }}"> <img src="{{ $image }}" width="160" alt="image" class="img-responsive">
-		</label>
-		@endforeach
-	@endif
-		</div>
-		
-		<div class="form-group">
-			<label>Edit Content</label>
-			<textarea name="editor1" id="editor1" rows="10" cols="80">
-                This is a textarea to be replaced with Editor.
-            </textarea>
-		</div>
-
-@endif
-
-		<input type="submit" class="btn btn-primary">
-
-	</form>
-	
-	</div>
 	</div>
 </div>
 
-@if ($action != "/fetch")
-
-	<script src="//cdn.ckeditor.com/4.5.3/standard/ckeditor.js"></script>
-	
-	<script>
-	
-		// < > & ' ' , conoverted
-		var msg = "{{ $content }}";
-		msg = msg.replace(/&lt;/gi, "<");
-		msg = msg.replace(/&gt;/gi, ">");
-		msg = msg.replace(/&amp;/gi, "&");
-		msg = msg.replace(/&quot;/gi, "'");
-		msg = msg.replace(/&nbsp;/gi, " ");
-		//alert (msg);
-	
-		// Replace the <textarea id="editor1"> with a CKEditor
-		// instance, using default configuration.
-		CKEDITOR.replace( 'editor1', {
-			// disable tags filter
-		    allowedContent: true
-		});
-		CKEDITOR.instances['editor1'].setData(msg);
-	                
-	</script>
-
-@endif
+</div>
 
 @include('footer')

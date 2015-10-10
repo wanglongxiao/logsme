@@ -335,6 +335,8 @@ class WeixinController extends Controller
 			$api->send(Config::get("weixin.adminopenid"), "ERR：仍有未发送图文，请发送");
 		} else {
 		
+			$api->send(Config::get("weixin.adminopenid"), "INFO：生成并上传图文..");
+			
 			// get 1 featured post from DB Post table
 			$data = array();
 			$terms = array(
@@ -425,7 +427,7 @@ class WeixinController extends Controller
 				
 				// Send preview to @AW
 				$res = $api->sendPreview ($newsid, Config::get("weixin.adminopenid"));
-				$api->send(Config::get("weixin.adminopenid"), "INFO：请预览此图文");
+				$api->send(Config::get("weixin.adminopenid"), "INFO：上传图文完成，请预览");
 				// Update Wxmedia to 'inpreview = 1'
 				$data = array(
 					'newsid' => $newsid,
@@ -550,6 +552,31 @@ class WeixinController extends Controller
 		return true;
 	}
 	
+	/**
+	 * create wechat menu (delete existed one first)
+	 */
+	public function createMenu()
+	{
+		$api = self::getApi();
+		
+		/*
+		//自定义菜单查询接口
+		$api->get_menu();
+		//获取自定义菜单配置接口	
+		$api->get_selfmenu();
+		*/	
+			
+		// 删除自定义菜单
+		$api->delete_menu();
+	
+		// 重新创建自定义菜单
+		$menujson = json_encode(Config::get("weixin.menu"));
+		$res = $api->create_menu($menujson);
+		var_dump($res);
+		
+		return true;
+	}
+	
 	/*
 	// 获取素材总数
 	$api->get_material_count();
@@ -569,80 +596,6 @@ class WeixinController extends Controller
 			'content' => '图文消息的具体内容',
 			'content_source_url' => 'http://www.diandian.com/'
 	), 1);
-	*/
-	
-	/*
-	自定义菜单创建接口
-	
-	$api->create_menu('
-	{
-	    "button":[
-	        {
-	          "type":"click",
-	          "name":"主菜单1",
-	          "key":"V1001_TODAY_MUSIC"
-	        },
-	        {
-	            "name":"主菜单2",
-	            "sub_button":[
-	                {
-	                    "type":"click",
-	                    "name":"点击推事件",
-	                    "key":"click_event1"
-	                },
-	                {
-	                    "type":"view",
-	                    "name":"跳转URL",
-	                    "url":"http://www.example.com/"
-	                },
-	                {
-	                    "type":"scancode_push",
-	                    "name":"扫码推事件",
-	                    "key":"scancode_push_event1"
-	                },
-	                {
-	                    "type":"scancode_waitmsg",
-	                    "name":"扫码带提示",
-	                    "key":"scancode_waitmsg_event1"
-	                }
-	            ]
-	       },
-	       {
-	            "name":"主菜单3",
-	            "sub_button":[
-	                {
-	                    "type":"pic_sysphoto",
-	                    "name":"系统拍照发图",
-	                    "key":"pic_sysphoto_event1"
-	                },
-	                {
-	                    "type":"pic_photo_or_album",
-	                    "name":"拍照或者相册发图",
-	                    "key":"pic_photo_or_album_event1"
-	                },
-	                {
-	                    "type":"pic_weixin",
-	                    "name":"微信相册发图",
-	                    "key":"pic_weixin_event1"
-	                },
-	                {
-	                    "type":"location_select",
-	                    "name":"发送位置",
-	                    "key":"location_select_event1"
-	                }
-	            ]
-	       }
-	    ]
-	}');
-	自定义菜单查询接口
-	
-	$api->get_menu();
-	自定义菜单删除接口
-	
-	$api->delete_menu();
-	获取自定义菜单配置接口
-	
-	$api->get_selfmenu();
 	*/
 
 }

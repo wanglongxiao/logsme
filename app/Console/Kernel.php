@@ -17,7 +17,8 @@ class Kernel extends ConsoleKernel
     	// register custom commands
     	\App\Console\Commands\DailyGen::class,
     	\App\Console\Commands\HourlyPush::class,
-    	\App\Console\Commands\DeleteNews::class
+    	\App\Console\Commands\DeleteNews::class,
+    	\App\Console\Commands\CreateMenu::class
     ];
 
     /**

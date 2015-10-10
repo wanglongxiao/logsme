@@ -17,20 +17,26 @@ Route::get('/', function () {
 });
 */
 
-Route::get('/', 'PostController@getList');
+Route::get('/', 'PostController@getHome');
+
+Route::get('/list', 'PostController@getList');
+
+Route::get('/tag/{id}/{type?}', 'PostController@getTagList');
 
 Route::get('/post/{id}', 'PostController@getPost');
 
-Route::any('/fetch', 'PostController@fetchPost');
+Route::get('/edit/{id}', 'PostController@getPostToEdit');
 
 Route::get('/delete/{id}', 'PostController@deletePost');
 
-Route::get('/bookmarklet',  function(){
-   return view('bookmarklet');
-});
+Route::any('/fetch', 'PostController@fetchPost');
 
 Route::post('/create', 'PostController@createPost');
 	
 Route::post('/update', 'PostController@updatePost');
+
+Route::get('/bookmarklet',  function(){
+	return view('bookmarklet');
+});
 
 Route::any('/weixinapi/wxhandling', 'WeixinController@handleWechat');

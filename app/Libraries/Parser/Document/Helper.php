@@ -81,7 +81,7 @@ class Helper
     static function isValidUrl($url)
     {
         $isValid = false;
-
+		
         // 
         if (strpos($url,'http') === false) {
             $url = preg_replace("/^(\/\/)*/", "http://", $url);
@@ -90,7 +90,6 @@ class Helper
         if (filter_var($url, FILTER_VALIDATE_URL) !== FALSE) {
             return true;
         }
-
         return $isValid;
     }
 

@@ -13,6 +13,27 @@
 		<!-- Latest compiled and minified JavaScript -->
 		<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+		
+		<style type="text/css">
+		
+			@media (min-width: 1200px) {
+			  .container {
+			    width: 960px;
+			  }
+			}
+			
+			@media (min-width: 1200px) {
+				.sqimage{
+				    position:relative;
+				    overflow:hidden;
+				    padding-bottom:100%;
+				}
+				.sqimage img{
+				    position:absolute;
+				}
+			}
+			
+		</style>
         
     </head>
 <body>

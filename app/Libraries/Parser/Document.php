@@ -37,14 +37,18 @@ class Document
 
     // Config
     private $config = Array();
+    
+    // Traget Url Hostname
+    private $targetHost = "";
 
     /**
      * @param String $source - input html string
      * @param String $input_char - string encoding, default "utf-8" can be ignored
      */
-    function __construct($source, $config = Document\Config::CONFIG_DEFAULT)
-    {
-        $this->config = Document\Config::get($config);
+    function __construct($source, $config = Document\Config::CONFIG_DEFAULT, $targetHost = "")
+    {    
+    	$this->targetHost = $targetHost;
+    	$this->config = Document\Config::get($config);
         $this->source = $source;
         \Log::info(__Method__." Load HTML with config name [$config]");
 
@@ -117,14 +121,6 @@ class Document
 
         \Log::debug(__Method__." Parsed source OG Info [".json_encode($this->_OGInfo)."]");
     }
-
-
-
-
-
-
-
-
 
     /* For calculating content area */
 
@@ -353,6 +349,16 @@ class Document
         $images = array();
         foreach ($html->find("img") as $image) {
         	$imageUrl = $image->getAttribute("src");
+        	if ($imageUrl == NULL or $imageUrl == "") {
+        		$imageUrl = $image->getAttribute("data-src");
+        	}
+        	
+        	// check $imageUrl includes hostname or not , change to full url path
+        	$imgHost = parse_url($imageUrl, PHP_URL_HOST);
+        	if ($imgHost == false || $imgHost == NULL) {
+        		$imageUrl = "http://".$this->targetHost."/".$imageUrl;
+        	}
+        	
             // Return only valid image url
             if (Document\Helper::isValidUrl($imageUrl) && !in_array($imageUrl, $images))
             {
@@ -417,7 +423,16 @@ class Document
 
         foreach ($html->find('iframe') as $element) {
             $iframeUrl = $element->getAttribute('src');
+            if ($iframeUrl == NULL or $iframeUrl == "") {
+            	$iframeUrl = $element->getAttribute("data-src");
+            }
 
+            // check $iframeUrl includes hostname or not , change to full url path
+            $iframeHost = parse_url($iframeUrl, PHP_URL_HOST);
+            if ($iframeHost == false || $iframeHost == NULL) {
+            	$iframeUrl = "http://".$this->targetHost."/".$iframeUrl;
+            }
+            
             if (Document\Helper::isValidUrl($iframeUrl)) {
 
                 if (Document\Helper::isYoutubeVideo($iframeUrl)) {
