@@ -3,10 +3,6 @@
 @include('navbar')
 
 <div class="container">
-	How To Play Video<br><br><br>
-</div>
-
-<div class="container">
 
 <div class="panel panel-default">
  	<div class="panel-body">

@@ -3,10 +3,6 @@
 @include('navbar')
 
 <div class="container">
-	LIST<br><br><br>
-</div>
-
-<div class="container">
 @foreach ($data as $item)
 
 <?php
@@ -21,6 +17,8 @@ $content = str_replace("&nbsp;"," ",$content);
 $tags = "";
 if ($item->tags != "") {
 	$tags = explode("," , $item->tags);
+	// keep existed array index only
+	$tags = array_intersect($tags,array_keys($alltags));
 }
 ?>
 

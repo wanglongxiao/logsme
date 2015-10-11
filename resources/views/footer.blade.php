@@ -1,6 +1,6 @@
 
 <div class="container">
-	-- footer --
+<br><br><br>
 </div>
 
 </body>

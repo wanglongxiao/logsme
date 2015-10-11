@@ -7,10 +7,6 @@ $hosturl = env('DOMAINNAME');
 ?>
 
 	<div class="container">
-		BOOKMARKLET<br><br><br>
-	</div>
-	
-	<div class="container">
 		<div class="panel panel-default">
  		<div class="panel-body">
  		<div class="form-group"> </div>

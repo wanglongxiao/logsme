@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>XXX</title>
+        <title></title>
 
         <!-- Latest compiled and minified CSS -->
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
@@ -37,3 +37,7 @@
         
     </head>
 <body>
+
+<div class="container">
+	<a href='/'></a><img src="/img/logo.jpg" class="img-responsive"></a>
+</div>

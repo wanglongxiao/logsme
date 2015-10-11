@@ -2,10 +2,6 @@
 
 @include('navbar')
 
-<div class="container">
-	EDIT<br><br><br>
-</div>
-
 <?php
 
 $id = "";

@@ -14,12 +14,10 @@ $content = str_replace("&nbsp;"," ",$content);
 $tags = "";
 if ($data['tags'] != "") {
 	$tags = explode("," , $data['tags']);
+	// keep existed array index only
+	$tags = array_intersect($tags,array_keys($alltags));
 }
 ?>
-
-<div class="container">
-	POST<br><br><br>
-</div>
 
 <div class="container">
 <!--  
