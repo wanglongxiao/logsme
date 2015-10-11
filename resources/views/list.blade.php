@@ -27,7 +27,7 @@ if ($item->tags != "") {
 
 		<div class="row">
 	  		<div class="col-md-12">
-	  			<img src='{{ $item->ogimage }}' class="img-thumbnail img-responsive">
+	  			<img src='{{ $item->ogimage }}' class="img-responsive">
 	  		</div>
 	  	</div>
 	  	<div class="row">
