@@ -16,9 +16,9 @@
 		
 		<style type="text/css">
 		
-			@media (min-width: 1200px) {
+			@media (min-width: 992px) {
 			  .container {
-			    width: 960px;
+			    width: 768px;
 			  }
 			}
 			

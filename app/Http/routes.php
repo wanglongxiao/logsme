@@ -39,4 +39,8 @@ Route::get('/bookmarklet',  function(){
 	return view('bookmarklet');
 });
 
+Route::get('/howtoplayvideo',  function(){
+	return view('fanqiang');
+});
+
 Route::any('/weixinapi/wxhandling', 'WeixinController@handleWechat');

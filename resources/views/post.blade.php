@@ -31,8 +31,7 @@ if ($data['tags'] != "") {
  		
  		<div class="media">
 		  <div class="media-body">
-		  	<center>
-		    <h3 class="media-heading">{{ $data['title'] }}</h3>	    
+		  	<h3 class="media-heading">{{ $data['title'] }}</h3>	    
 		    @if ($tags != 0)
 		    @foreach ($tags as $tag)
 		    	<a href="/tag/{{ $tag }}" style="float:right; margin:0 0 5px 5px;"><span class="label label-primary">{{ $alltags[$tag] }}</span></a>
@@ -40,7 +39,6 @@ if ($data['tags'] != "") {
 		    @endif
 		    <hr>
 		    <?php echo $content; ?>
-		    </center>
 		  </div>
 		</div>
 		

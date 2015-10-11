@@ -335,7 +335,7 @@ class WeixinController extends Controller
 			$api->send(Config::get("weixin.adminopenid"), "ERR：仍有未发送图文，请发送");
 		} else {
 		
-			$api->send(Config::get("weixin.adminopenid"), "INFO：生成并上传图文..");
+			$api->send(Config::get("weixin.adminopenid"), "INFO：生成图文并上传中..");
 			
 			// get 1 featured post from DB Post table
 			$data = array();
@@ -572,7 +572,6 @@ class WeixinController extends Controller
 		// 重新创建自定义菜单
 		$menujson = json_encode(Config::get("weixin.menu"));
 		$res = $api->create_menu($menujson);
-		var_dump($res);
 		
 		return true;
 	}
