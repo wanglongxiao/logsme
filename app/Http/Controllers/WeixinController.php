@@ -568,10 +568,69 @@ class WeixinController extends Controller
 			
 		// 删除自定义菜单
 		$api->delete_menu();
-	
+		
 		// 重新创建自定义菜单
-		$menujson = json_encode(Config::get("weixin.menu"));
+		// Max 3 1st lvl menu , max 5 2nd lvl menu
+		// Json_encode the menu array with Chinese directly, will trigger Weixin 40033 Err
+		//$menujson = json_encode(Config::get("weixin.menu"));
+		
+		$menujson = "
+		{
+			'button':[ 
+		";
+		// 1st
+		$menujson = $menujson."
+		{
+			'name':'海外视频',
+		    'sub_button':[
+				{
+			    	'type':'view',
+			        'name':'最新视频',
+			        'url':'http://".env('DOMAINNAME')."/list?type=vid'
+			    },
+			    {
+			    	'type':'view',
+					'name':'播放须知',
+			        'url':'http://".env('DOMAINNAME')."/howtoplayvideo'
+			    },
+			]
+		}
+		";
+		// 2nd
+		$menujson = $menujson."
+		{
+			'name':'今日热门',
+		    'sub_button':[
+		";
+		foreach(Config::get("weixin.tags") as $key => $val) {
+			$menujson = $menujson."
+				{
+			    	'type':'view',
+			        'name':'".$val."',
+			        'url':'http://".env('DOMAINNAME')."/tag/".$key."/img'
+			    },
+			";
+		}
+		$menujson = $menujson."
+			]
+		}
+		";
+		// 3rd
+		$menujson = $menujson."
+		{
+			'type':'view',
+			'name':'精彩回顾',
+		    'url':'".Config::get("weixin.historymsgurl")."'
+		}
+		";
+		$menujson = $menujson."
+			]
+		}
+		";
+		echo $menujson."\n\n";
+		
 		$res = $api->create_menu($menujson);
+		var_dump($res);
 		
 		return true;
 	}
