@@ -8,8 +8,8 @@
         "php": ">=5.5.9",
         "laravel/framework": "5.1.*",
         "sunra/php-simple-html-dom-parser": "v1.5.0",
-        "laravel/socialite": "2.0",
-        "gaoming13/wechat-php-sdk": "dev-master"
+        "laravel/socialite": "2.0.*",
+        "gaoming13/wechat-php-sdk": "*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
