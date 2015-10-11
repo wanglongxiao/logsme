@@ -92,7 +92,12 @@ class WeixinController extends Controller
 	    
 	
 	    // 默认消息
-	    $default_msg = "/微笑 多谢关注－海外视频精选\n 本公众号仍在开发测试中.. 将于2015年10月底上线\n 每天都将带给您最新、最有趣的内容。请广传 ！";
+	    $default_msg = "
+	    	/微笑 多谢您的关注\n
+	    	［海外视频精选］每天发布最新最有趣的视频和网文，点<a href='http://".env("DOMAINNAME")."'>［这里］</a>访问更多内容\n
+	   		如播放遇到问题，请点击［海外视频］-［播放须知］\n
+	    	请多多转发并推荐给您的朋友 ..	
+	    ";
 	    
 	    // 用户关注微信号后 - 回复用户普通文本消息
 	    if ($msg->MsgType == 'event' && $msg->Event == 'subscribe') {
@@ -101,8 +106,8 @@ class WeixinController extends Controller
 	    }
 	
 	    // 用户回复1 - 回复文本消息
-	    if ($msg->MsgType == 'text' && $msg->Content == '1') {
-	        $wechat->reply("hello world!");
+	    if ($msg->MsgType == 'text' && $msg->Content == 'help') {
+	        $wechat->reply("系统帮助：请访问 http://".env("DOMAINNAME"));
 	        /* 也可使用这种数组方式回复
 	        $wechat->reply(array(
 	            'type' => 'text',
