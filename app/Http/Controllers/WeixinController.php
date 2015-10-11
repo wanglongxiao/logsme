@@ -581,24 +581,6 @@ class WeixinController extends Controller
 		// 1st
 		$menujson = $menujson.'
 		{
-			"name":"海外视频",
-		    "sub_button":[
-				{
-			    	"type":"view",
-			        "name":"最新视频",
-			        "url":"http://'.env('DOMAINNAME').'/list?type=vid"
-			    },
-			    {
-			    	"type":"view",
-					"name":"播放须知",
-			        "url":"http://'.env('DOMAINNAME').'/howtoplayvideo"
-			    }
-			]
-		},
-		';
-		// 2nd
-		$menujson = $menujson.'
-		{
 			"name":"今日热门",
 		    "sub_button":[
 		';
@@ -616,6 +598,24 @@ class WeixinController extends Controller
 			if ($i < $count) $menujson = $menujson.',';
 		}
 		$menujson = $menujson.'
+			]
+		},
+		';
+		// 2nd
+		$menujson = $menujson.'
+		{
+			"name":"海外视频",
+		    "sub_button":[
+				{
+			    	"type":"view",
+			        "name":"最新视频",
+			        "url":"http://'.env('DOMAINNAME').'/list?type=vid"
+			    },
+			    {
+			    	"type":"view",
+					"name":"播放须知",
+			        "url":"http://'.env('DOMAINNAME').'/howtoplayvideo"
+			    }
 			]
 		},
 		';
