@@ -92,12 +92,7 @@ class WeixinController extends Controller
 	    
 	
 	    // 默认消息
-	    $default_msg = "
-	    	/微笑 多谢您的关注\n
-	    	［海外视频精选］每天发布最新最有趣的视频和网文，点<a href='http://".env("DOMAINNAME")."'>［这里］</a>访问更多内容\n
-	   		如播放遇到问题，请点击［海外视频］-［播放须知］\n
-	    	请多多转发并推荐给您的朋友 ..	
-	    ";
+	    $default_msg = "/微笑 多谢您的关注 \n［海外视频精选］每天发布最新最有趣的视频和网文，更多内容请访问 http://".env("DOMAINNAME")." \n如播放遇到问题，请点击［海外视频］-［播放须知］\n请多多转发呦..";
 	    
 	    // 用户关注微信号后 - 回复用户普通文本消息
 	    if ($msg->MsgType == 'event' && $msg->Event == 'subscribe') {
