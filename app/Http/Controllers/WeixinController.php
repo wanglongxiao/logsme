@@ -574,64 +574,64 @@ class WeixinController extends Controller
 		// Json_encode the menu array with Chinese directly, will trigger Weixin 40033 Err
 		//$menujson = json_encode(Config::get("weixin.menu"));
 		
-		$menujson = "
+		$menujson = '
 		{
-			'button':[ 
-		";
+			"button":[ 
+		';
 		// 1st
-		$menujson = $menujson."
+		$menujson = $menujson.'
 		{
-			'name':'海外视频',
-		    'sub_button':[
+			"name":"海外视频",
+		    "sub_button":[
 				{
-			    	'type':'view',
-			        'name':'最新视频',
-			        'url':'http://".env('DOMAINNAME')."/list?type=vid'
+			    	"type":"view",
+			        "name":"最新视频",
+			        "url":"http://'.env('DOMAINNAME').'/list?type=vid"
 			    },
 			    {
-			    	'type':'view',
-					'name':'播放须知',
-			        'url':'http://".env('DOMAINNAME')."/howtoplayvideo'
+			    	"type":"view",
+					"name":"播放须知",
+			        "url":"http://'.env('DOMAINNAME').'/howtoplayvideo"
 			    }
 			]
 		},
-		";
+		';
 		// 2nd
-		$menujson = $menujson."
+		$menujson = $menujson.'
 		{
-			'name':'今日热门',
-		    'sub_button':[
-		";
+			"name":"今日热门",
+		    "sub_button":[
+		';
 		$i = 0;
 		$count = count(Config::get("weixin.tags"));
 		foreach(Config::get("weixin.tags") as $key => $val) {
 			$i++;
-			$menujson = $menujson."
+			$menujson = $menujson.'
 				{
-			    	'type':'view',
-			        'name':'".$val."',
-			        'url':'http://".env('DOMAINNAME')."/tag/".$key."/img'
+			    	"type":"view",
+			        "name":"'.$val.'",
+			        "url":"http://'.env("DOMAINNAME").'/tag/'.$key.'/img"
 			    }
-			";
-			if ($i < $count) $menujson = $menujson.",";
+			';
+			if ($i < $count) $menujson = $menujson.',';
 		}
-		$menujson = $menujson."
+		$menujson = $menujson.'
 			]
 		},
-		";
+		';
 		// 3rd
-		$menujson = $menujson."
+		$menujson = $menujson.'
 		{
-			'type':'view',
-			'name':'精彩回顾',
-		    'url':'".Config::get("weixin.historymsgurl")."'
+			"type":"view",
+			"name":"精彩回顾",
+		    "url":"'.Config::get("weixin.historymsgurl").'"
 		}
-		";
-		$menujson = $menujson."
+		';
+		$menujson = $menujson.'
 			]
 		}
-		";
-		echo $menujson."\n\n";
+		';
+		//echo $menujson;
 		
 		$res = $api->create_menu($menujson);
 		var_dump($res);
