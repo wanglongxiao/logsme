@@ -592,9 +592,9 @@ class WeixinController extends Controller
 			    	'type':'view',
 					'name':'播放须知',
 			        'url':'http://".env('DOMAINNAME')."/howtoplayvideo'
-			    },
+			    }
 			]
-		}
+		},
 		";
 		// 2nd
 		$menujson = $menujson."
@@ -602,18 +602,22 @@ class WeixinController extends Controller
 			'name':'今日热门',
 		    'sub_button':[
 		";
+		$i = 0;
+		$count = count(Config::get("weixin.tags"));
 		foreach(Config::get("weixin.tags") as $key => $val) {
+			$i++;
 			$menujson = $menujson."
 				{
 			    	'type':'view',
 			        'name':'".$val."',
 			        'url':'http://".env('DOMAINNAME')."/tag/".$key."/img'
-			    },
+			    }
 			";
+			if ($i < $count) $menujson = $menujson.",";
 		}
 		$menujson = $menujson."
 			]
-		}
+		},
 		";
 		// 3rd
 		$menujson = $menujson."
