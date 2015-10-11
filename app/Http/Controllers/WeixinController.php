@@ -102,7 +102,7 @@ class WeixinController extends Controller
 	
 	    // 用户回复1 - 回复文本消息
 	    if ($msg->MsgType == 'text' && $msg->Content == 'help') {
-	        $wechat->reply("系统帮助：请访问 http://".env("DOMAINNAME"));
+	        $wechat->reply("系统帮助：\n请访问 ".env("DOMAINNAME"));
 	        /* 也可使用这种数组方式回复
 	        $wechat->reply(array(
 	            'type' => 'text',
