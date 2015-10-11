@@ -63,10 +63,11 @@ return [
 
 	/*
 	 |--------------------------------------------------------------------------
-	 | Weixin Menu
+	 | Weixin Related
 	 |--------------------------------------------------------------------------
 	 */
 	
 	'historymsgurl' => 'http://mp.weixin.qq.com/mp/getmasssendmsg?__biz=MzA3MDMyNDI1Nw==#wechat_webview_type=1&wechat_redirect',
-
+	'qrcodeurl' => 'https://mmbiz.qlogo.cn/mmbiz/6xo6WHaicfzaGszuNnfPyJdvxLws9icdvEb228roB4aA445FkBMqrtDeKqUDM4zGRPbAvwJcY8l6EablGnFSLqww/0?wx_fmt=png',
+		
 ];

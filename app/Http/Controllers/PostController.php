@@ -7,6 +7,7 @@ use Illuminate\Routing\Controller;
 use Config;
 use Log;
 use App\Models\Post;
+use App\Http\Controllers\WeixinController;
 
 class PostController extends Controller
 {
@@ -48,6 +49,10 @@ class PostController extends Controller
     		'isapproved' => 1
     	); 
     	$data = self::getListByFilter($terms);
+    	// add QRcode at the end of content
+    	foreach ($data as $item) {
+    		$item->content = $item->content.WeixinController::addQrcode($item->sourcedomain);
+    	}
     	 
     	return response()->view('list', [ 'data' => $data, 'alltags' => Config::get("weixin.tags") ])->header('Content-Type', $type);
     }
@@ -79,6 +84,10 @@ class PostController extends Controller
     		$terms["hasvideo"] = 1;
     	}
     	$data = self::getListByFilter($terms);
+    	// add QRcode at the end of content
+    	foreach ($data as $item) {
+    		$item->content = $item->content.WeixinController::addQrcode($item->sourcedomain);
+    	}
     
     	return response()->view('list', [ 'data' => $data, 'alltags' => Config::get("weixin.tags") ]);
     }
@@ -102,6 +111,10 @@ class PostController extends Controller
    		$data = $query->get();
 	    
 	    if (!$data->isEmpty()) {
+	    	// add QRcode at the end of content
+	    	foreach ($data as $item) {
+	    		$item->content = $item->content.WeixinController::addQrcode($item->sourcedomain);
+	    	}
 	    	return response()->view('list', [ 'data' => $data, 'alltags' => Config::get("weixin.tags") ]);
 	    } else {
 	    	return redirect('/');
@@ -119,6 +132,8 @@ class PostController extends Controller
     		$post = Post::findOrFail($id);
     	}
     	$post = $post->attributesToArray();
+    	// add QRcode at the end of content
+    	$post['content'] = $post['content'].WeixinController::addQrcode($post['sourcedomain']);
     	
     	return response()->view('post', ['data' => $post, 'url' => $post['url'], 'alltags' => Config::get("weixin.tags") ]);
     }

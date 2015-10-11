@@ -314,6 +314,23 @@ class WeixinController extends Controller
 		
 		return array($content, $mediaids);
 	}
+	
+	/**
+	 * add QRcode to content
+	 */
+	public static function addQrcode($sourcedomain = "")
+	{
+		$str = "";
+		if($sourcedomain != "") {
+			$arr = explode(".", $sourcedomain);
+			$idx = count($arr) - 2;
+			if ($idx >= 0) {
+				$str = $str."<p style='text-align:right;color:#d3d3d3;'>来源：".$arr[$idx]."</p>";
+			}
+		}
+		$str = $str."<p><img src='".Config::get("weixin.qrcodeurl")."' class='img-responsive'></p>";
+		return $str;
+	}
 
 	/**
 	 * Submit news to Weixin

@@ -39,5 +39,5 @@
 <body>
 
 <div class="container">
-	<a href='/'></a><img src="/img/logo.jpg" class="img-responsive"></a>
+	<a href="/"><img src="/img/logo.jpg" class="img-responsive"></a>
 </div>
