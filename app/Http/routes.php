@@ -48,3 +48,5 @@ Route::any('/weixinapi/wxhandling', 'WeixinController@handleWechat');
 Route::get('/auth/facebook', 'Auth\AuthController@redirectToProvider');
 Route::get('/auth/facebook/callback', 'Auth\AuthController@handleProviderCallback');
 
+
+

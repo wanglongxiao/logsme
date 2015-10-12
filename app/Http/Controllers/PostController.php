@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Session;
 use Config;
 use Log;
 use App\Models\Post;
@@ -17,6 +18,20 @@ class PostController extends Controller
 	private $userAgents = array(
 			'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.101 Safari/537.36'
 	);
+	
+	/**
+	 * Judge admin user or not
+	 */
+	public static function isAdmin()
+	{
+		$user = Session::get('loginuser');
+		if ($user == env('ADMINEMAIL')) {
+			return true;
+		} else {
+			return false;
+		}
+	
+	}
 	
 	/**
      * Get data from DB
@@ -44,8 +59,6 @@ class PostController extends Controller
      */
     public static function getHome()
     {
-    	$user = Cache::get('loginuser');
-    	echo "### $user <br>";
     	$type = "text/html";
     	$terms = array(
     		'isapproved' => 1
@@ -308,6 +321,10 @@ class PostController extends Controller
      */
     public function fetchPost(Request $request)
     {
+    	if (self::isAdmin()) {
+    		echo "## this is the admin <br>";
+    	} else "## this is a normal user <br>";
+    	
     	$url = $request->url;
     	
     	//TODO only support url with "http://" or "https://", check url is http/https or not

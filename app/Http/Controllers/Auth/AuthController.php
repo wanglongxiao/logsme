@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use Socialite;
 use Illuminate\Routing\Controller;
-use Cache;
+use Session;
 use Config;
 use Log;
 
@@ -42,11 +42,9 @@ class AuthController extends Controller
         */
         
 		Log::error($user->getEmail());
-		
-		if ($user->getEmail() == "wanglongxiao@hotmail.com") {
-			Cache::put('loginuser',$user->getEmail() , 10);
+		if ($user->getEmail() == env('ADMINEMAIL')) {
+			Session::put('loginuser', $user->getEmail());
 		}
-        return redirect('/');
-        
+        return redirect('/');    
     }
 }
