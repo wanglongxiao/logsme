@@ -11,6 +11,7 @@ $content = str_replace("&quot;","'",$content);
 $content = str_replace("&nbsp;"," ",$content);
 
 // parser tags
+$alltags = Config::get("weixin.tags");
 $tags = "";
 if ($data['tags'] != "") {
 	$tags = explode("," , $data['tags']);
@@ -29,7 +30,11 @@ if ($data['tags'] != "") {
  		
  		<div class="media">
 		  <div class="media-body">
-		  	<h3 class="media-heading">{{ $data['title'] }}</h3>	    
+		  	<h3 class="media-heading">{{ $data['title'] }}</h3>
+		  	@if ($isadmin)
+		  	<a href='/admin/delete/{{ $data["id"] }}' style="float:right; margin:0 0 5px 5px;">[Delete]</a>
+		  	<a href='/admin/edit/{{ $data["id"] }}' style="float:right; margin:0 0 5px 5px;">[Edit]</a>
+		  	@endif
 		    @if ($tags != 0)
 		    @foreach ($tags as $tag)
 		    	<a href="/tag/{{ $tag }}" style="float:right; margin:0 0 5px 5px;"><span class="label label-primary">{{ $alltags[$tag] }}</span></a>

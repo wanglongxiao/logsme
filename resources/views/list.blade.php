@@ -14,6 +14,7 @@ $content = str_replace("&quot;","'",$content);
 $content = str_replace("&nbsp;"," ",$content);
 
 // parser tags
+$alltags = Config::get("weixin.tags");
 $tags = "";
 if ($item->tags != "") {
 	$tags = explode("," , $item->tags);
@@ -27,7 +28,7 @@ if ($item->tags != "") {
 
 		<div class="row">
 	  		<div class="col-md-12">
-	  			<img src='{{ $item->ogimage }}' class="img-responsive">
+	  			<a href='/post/{{ $item->id }}'><img src='{{ $item->ogimage }}' class="img-responsive"></a>
 	  		</div>
 	  	</div>
 	  	<div class="row">
@@ -40,21 +41,25 @@ if ($item->tags != "") {
 	    				<a href="/tag/{{ $tag }}"><span class="label label-primary">{{ $alltags[$tag] }}</span></a>
 					@endforeach
 					@endif
-					@if ($item->ispublished == 0)
-					<span class="label label-default">NotPublish</span>
-					@else
-					<span class="label label-success">Published</span>
+					@if ($isadmin)
+						@if ($item->ispublished == 0)
+						<a href='/list?ispublished=0'><span class="label label-default">NotPublish</span></a>
+						@else
+						<a href='/list?ispublished=1'><span class="label label-success">Published</span></a>
+						@endif
+						@if ($item->isfeatured == 0)
+						<a href='/list?isfeatured=0'><span class="label label-default">NotFeature</span></a>
+						@else
+						<a href='/list?isfeatured=1'><span class="label label-primary">Featured</span></a>
+						@endif
 					@endif
-					@if ($item->isfeatured == 0)
-					<span class="label label-default">NotFeature</span>
-					@else
-					<span class="label label-primary">Featured</span>
-					@endif
-					<span style="float:right; margin:0 0 3px 3px;">
-						<a href="#" data-toggle="modal" data-target="#basicModal-{{ $item->id }}">[View]</a>
-						<a href='/post/{{ $item->id }}'>[Post]</a>  
-   						<a href='/edit/{{ $item->id }}'>[Edit]</a>  
-						<a href='/delete/{{ $item->id }}'>[Delete]</a>
+					<span style="float:right; margin:0 0 5px 5px;">
+						<a href="#" data-toggle="modal" data-target="#basicModal-{{ $item->id }}">[预览]</a>
+						<a href='/post/{{ $item->id }}'>[打开]</a>
+						@if ($isadmin)
+   						<a href='/admin/edit/{{ $item->id }}'>[Edit]</a>
+						<a href='/admin/delete/{{ $item->id }}'>[Delete]</a>
+						@endif
 					</span>
 				</p>
 	 		</div>

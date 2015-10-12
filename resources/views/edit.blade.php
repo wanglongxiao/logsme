@@ -2,6 +2,12 @@
 
 @include('navbar')
 
+@if (!$isadmin)
+<script>
+	window.location.href = '{{ url("http://".env("DOMAINNAME")) }}'; //using a named route
+</script>
+@endif
+
 <?php
 
 $id = "";
@@ -33,10 +39,10 @@ if (isset($data)) {
 
 
 if ($id != "") {
-	$action = "/update";
+	$action = "/admin/update";
 } else if ( isset($url) && $url != "") {
-	$action = "/create";
-} else $action = "/fetch";
+	$action = "/admin/create";
+} else $action = "/admin/fetch";
 
 
 ?>
@@ -51,38 +57,40 @@ if ($id != "") {
 	
 		<input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
 
-@if ($action == "/fetch")
+@if ($action == "/admin/fetch")
 		
 		<div class="form-group"> </div>
 		<div class="form-group">
-			<label>Post Ori Url</label> <input type="input" class="form-control"
+			<label>Post Original Url</label> <input type="input" class="form-control"
 					name="url" id="url" placeholder="Please Input The Url" value="">
 		</div>
 		
 @else
+	
+	<button type="button" class="btn btn-danger" onClick="window.location.href='/admin/delete/{{ $id }}'">Delete</button>
 
-	@if ($action == "/update")
-		<button type="button" class="btn btn-primary" onClick="window.location.href='/fetch?url={{ $url }}'">ReFetch Url</button>
+	@if ($action == "/admin/update")
+		<button type="button" class="btn btn-info" onClick="window.location.href='/admin/fetch?url={{ $url }}'">ReFetch Url</button>
 		<span style="float:right;">
 					@if ($isapproved == 0)
-					<span class="label label-default">NotApprove</span>
+					<a href='/list?isapproved=0'><span class="label label-default">NotApprove</span></a>
 					@else
-					<span class="label label-warning">Approved</span>
+					<a href='/list?isapproved=1'><span class="label label-warning">Approved</span></a>
 					@endif
 					@if ($ispublished == 0)
-					<span class="label label-default">NotPublish</span>
+					<a href='/list?ispublished=0'><span class="label label-default">NotPublish</span></a>
 					@else
-					<span class="label label-success">Published</span>
+					<a href='/list?ispublished=1'><span class="label label-success">Published</span></a>
 					@endif
 					@if ($isfeatured == 0)
-					<span class="label label-default">NotFeature</span>
+					<a href='/list?isfeatured=0'><span class="label label-default">NotFeature</span></a>
 					@else
-					<span class="label label-primary">Featured</span>
+					<a href='/list?isfeatured=1'><span class="label label-primary">Featured</span></a>
 					@endif
 					@if ($hasvideo == 0)
-					<span class="label label-default">NotVideo</span>
+					<a href='/list?type=img'><span class="label label-default">NotVideo</span></a>
 					@else
-					<span class="label label-info">HasVideo</span>
+					<a href='/list?type=vid'><span class="label label-info">HasVideo</span></a>
 					@endif
 		</span>
 	@endif
@@ -111,7 +119,7 @@ if ($id != "") {
 			<label>Tags</label>
 		</div>
 		<div class="form-group">
-		@foreach ($alltags as $tagkey => $tagvalue)
+		@foreach (Config::get("weixin.tags") as $tagkey => $tagvalue)
 				<?php
 					$checked = "";
 					if($tags != "" && stripos($tags, $tagkey) !== false) $checked = "checked";
@@ -177,7 +185,7 @@ if ($id != "") {
 	</div>
 </div>
 
-@if ($action != "/fetch")
+@if ($action != "/admin/fetch")
 
 	<script src="//cdn.ckeditor.com/4.5.3/standard/ckeditor.js"></script>
 	

@@ -30,7 +30,6 @@ class PostController extends Controller
 		} else {
 			return false;
 		}
-	
 	}
 	
 	/**
@@ -69,11 +68,11 @@ class PostController extends Controller
     		$item->content = $item->content.WeixinController::addQrcode($item->sourcedomain);
     	}
     	 
-    	return response()->view('list', [ 'data' => $data, 'alltags' => Config::get("weixin.tags") ])->header('Content-Type', $type);
+    	return response()->view('list', [ 'data' => $data, 'isadmin' => self::isAdmin() ])->header('Content-Type', $type);
     }
     
     /**
-     * Responds to requests to GET /list?type=[img|vid]&isapproved=[0|1]&ispublished=[0|1]
+     * Responds to requests to GET /list?type=[img|vid]&isapproved=[0|1]&ispublished=[0|1]&isfeatured=[0|1]
      */
     public static function getList(Request $request)
     {
@@ -91,6 +90,13 @@ class PostController extends Controller
     	if ($ispublished == "1") {
     		$terms["ispublished"] = 1;
     	}
+    	$isfeatured = $request->isfeatured;
+    	if ($isfeatured == "0") {
+    		$terms["isfeatured"] = 0;
+    	}
+    	if ($isfeatured == "1") {
+    		$terms["isfeatured"] = 1;
+    	}
     	$type = $request->type;
     	if ($type == "img") {
     		$terms["hasvideo"] = 0;
@@ -104,7 +110,7 @@ class PostController extends Controller
     		$item->content = $item->content.WeixinController::addQrcode($item->sourcedomain);
     	}
     
-    	return response()->view('list', [ 'data' => $data, 'alltags' => Config::get("weixin.tags") ]);
+    	return response()->view('list', [ 'data' => $data, 'isadmin' => self::isAdmin() ]);
     }
     
     /**
@@ -130,7 +136,7 @@ class PostController extends Controller
 	    	foreach ($data as $item) {
 	    		$item->content = $item->content.WeixinController::addQrcode($item->sourcedomain);
 	    	}
-	    	return response()->view('list', [ 'data' => $data, 'alltags' => Config::get("weixin.tags") ]);
+	    	return response()->view('list', [ 'data' => $data, 'isadmin' => self::isAdmin() ]);
 	    } else {
 	    	return redirect('/');
 	    }
@@ -150,15 +156,15 @@ class PostController extends Controller
     	// add QRcode at the end of content
     	$post['content'] = $post['content'].WeixinController::addQrcode($post['sourcedomain']);
     	
-    	return response()->view('post', ['data' => $post, 'url' => $post['url'], 'alltags' => Config::get("weixin.tags") ]);
+    	return response()->view('post', ['data' => $post, 'url' => $post['url'], 'isadmin' => self::isAdmin() ]);
     }
     
     /**
-     * Responds to requests to GET /edit/1
+     * Responds to requests to GET /admin/edit/1
      */
     public static function getPostToEdit($id)
     {
-    	//echo "#### ".$id."<br>";
+    	if (!self::isAdmin()) return redirect('/');
     	 
     	$post = new Post;
     	if ($id != null || $id != "") {
@@ -166,15 +172,15 @@ class PostController extends Controller
     	}
     	$post = $post->attributesToArray();
     	 
-    	return response()->view('edit', ['data' => $post, 'url' => $post['url'], 'alltags' => Config::get("weixin.tags") ]);
+    	return response()->view('edit', ['data' => $post, 'url' => $post['url'], 'isadmin' => self::isAdmin() ]);
     }
     
     /**
-     * Responds to requests to GET /delete/1
+     * Responds to requests to GET /admin/delete/1
      */
     public static function deletePost($id)
     {
-    	//echo "#### ".$id."<br>";
+    	if (!self::isAdmin()) return redirect('/');
     	 
     	if ($id != null || $id != "") {
     		$post = Post::findOrFail($id);
@@ -189,6 +195,8 @@ class PostController extends Controller
      */
     public static function updateByIds($terms, $ids)
     {
+    	if (!self::isAdmin()) return redirect('/');
+    	
     	if (isset($terms) && is_array($terms) && isset($ids) && is_array($ids)) {
     		/*
     		$updateVals = array();
@@ -210,12 +218,14 @@ class PostController extends Controller
      */
     public static function setApprovedById($id)
     {
+    	if (!self::isAdmin()) return redirect('/');
+    	
     	$tearms = array(
     		'isapproved' => 1
     	);
     	self::updateByIds($terms, array($id));
     	
-    	//return redirect('post/'.$id);
+    	//return redirect('/post/'.$id);
     }
     
     /**
@@ -223,24 +233,22 @@ class PostController extends Controller
      */
     public static function setUnPublishedById($id)
     {
+    	if (!self::isAdmin()) return redirect('/');
+    	
     	$tearms = array(
     			'ispublished' => 0
     	);
     	self::updateByIds($terms, array($id));
     	 
-    	//return redirect('post/'.$id);
+    	//return redirect('/post/'.$id);
     }
     
     /**
-     * Responds to requests to POST /create
+     * Responds to requests to POST /admin/create
      */
     public function createPost(Request $request)
     {
-    	/*
-    	 echo "### create ###"."<br>";
-    	 $input = $request->all();
-    	 var_dump($input);die();
-    	 */
+    	if (!self::isAdmin()) return redirect('/');
     	 
     	$post = Post::firstOrNew(['url' => $request->url]);
     	//$post = new Post;
@@ -279,11 +287,12 @@ class PostController extends Controller
     }    
     
     /**
-    * Responds to requests to POST /update
+    * Responds to requests to POST /admin/update
     */
     public function updatePost(Request $request)
     {
-    
+    	if (!self::isAdmin()) return redirect('/');
+    	
 	    if ($request->id != null && $request->id != "") {
 	    
 		    $id = $request->id;
@@ -310,20 +319,18 @@ class PostController extends Controller
 		    
 		    $post->save();
 		    
-		    return redirect('edit/'.$id);
+		    return redirect('/admin/edit/'.$id);
 	    }
     
     	return redirect('/');
     }
 
     /**
-     * Responds to requests to GET /fetch
+     * Responds to requests to GET /admin/fetch
      */
     public function fetchPost(Request $request)
     {
-    	if (self::isAdmin()) {
-    		echo "## this is the admin <br>";
-    	} else "## this is a normal user <br>";
+    	if (!self::isAdmin()) return redirect('/');
     	
     	$url = $request->url;
     	
@@ -335,13 +342,13 @@ class PostController extends Controller
 	    	//var_dump($res);
 	    	if ($res !== false) {
 	    		//return response()->json($res);
-	    		return response()->view('edit', ['data' => $res, 'url' => $url, 'alltags' => Config::get("weixin.tags")]);
+	    		return response()->view('edit', ['data' => $res, 'url' => $url, 'isadmin' => self::isAdmin() ]);
 	    	} else {
 	    		return response()->json(['error' => 400]);
 	    	}
     	}
     	
-    	return response()->view('edit');
+    	return response()->view('edit', [ 'isadmin' => self::isAdmin() ]);
     }
 
     /**

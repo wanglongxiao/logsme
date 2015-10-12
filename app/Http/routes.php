@@ -25,28 +25,29 @@ Route::get('/tag/{id}/{type?}', 'PostController@getTagList');
 
 Route::get('/post/{id}', 'PostController@getPost');
 
-Route::get('/edit/{id}', 'PostController@getPostToEdit');
-
-Route::get('/delete/{id}', 'PostController@deletePost');
-
-Route::any('/fetch', 'PostController@fetchPost');
-
-Route::post('/create', 'PostController@createPost');
-	
-Route::post('/update', 'PostController@updatePost');
-
-Route::get('/bookmarklet',  function(){
-	return view('bookmarklet');
-});
-
 Route::get('/howtoplayvideo',  function(){
 	return view('fanqiang');
 });
 
-Route::any('/weixinapi/wxhandling', 'WeixinController@handleWechat');
+
+Route::any('/admin/fetch', 'PostController@fetchPost');
+
+Route::get('/admin/edit/{id}', 'PostController@getPostToEdit');
+
+Route::post('/admin/create', 'PostController@createPost');
+	
+Route::post('/admin/update', 'PostController@updatePost');
+
+Route::get('/admin/delete/{id}', 'PostController@deletePost');
+
+Route::get('/admin/bookmarklet',  function(){
+	return view('bookmarklet');
+});
+
 
 Route::get('/auth/facebook', 'Auth\AuthController@redirectToProvider');
 Route::get('/auth/facebook/callback', 'Auth\AuthController@handleProviderCallback');
 
 
+Route::any('/weixinapi/wxhandling', 'WeixinController@handleWechat');
 

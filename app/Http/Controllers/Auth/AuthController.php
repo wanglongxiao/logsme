@@ -41,7 +41,7 @@ class AuthController extends Controller
         $user->getAvatar();
         */
         
-		Log::error($user->getEmail());
+		Log::error("FB login email : ".$user->getEmail());
 		if ($user->getEmail() == env('ADMINEMAIL')) {
 			Session::put('loginuser', $user->getEmail());
 		}
