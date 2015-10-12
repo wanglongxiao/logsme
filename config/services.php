@@ -39,7 +39,7 @@ return [
 	'facebook' => [
 		'client_id' => env('FB_CLIENT_ID'),
 		'client_secret' => env('FB_SECRET_ID'),
-		'redirect' => 'http://'.env('DOMAINNAME'),
+		'redirect' => 'http://'.env('DOMAINNAME').'/auth/facebook/callback',
 	],
 
 ];

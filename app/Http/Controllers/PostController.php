@@ -44,6 +44,8 @@ class PostController extends Controller
      */
     public static function getHome()
     {
+    	$user = Cache::get('loginuser');
+    	echo "### $user <br>";
     	$type = "text/html";
     	$terms = array(
     		'isapproved' => 1

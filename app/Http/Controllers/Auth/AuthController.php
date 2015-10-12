@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Auth;
 
 use Socialite;
 use Illuminate\Routing\Controller;
+use Cache;
+use Config;
+use Log;
 
 class AuthController extends Controller
 {
@@ -26,15 +29,10 @@ class AuthController extends Controller
     {
         $user = Socialite::driver('facebook')->user();
 
-        // $user->token;
         /*
-        // OAuth Two Providers
-        $token = $user->token;
-        
         // OAuth One Providers
         $token = $user->token;
         $tokenSecret = $user->tokenSecret;
-        
         // All Providers
         $user->getId();
         $user->getNickname();
@@ -42,5 +40,13 @@ class AuthController extends Controller
         $user->getEmail();
         $user->getAvatar();
         */
+        
+		Log::error($user->getEmail());
+		
+		if ($user->getEmail() == "wanglongxiao@hotmail.com") {
+			Cache::put('loginuser',$user->getEmail() , 10);
+		}
+        return redirect('/');
+        
     }
 }
