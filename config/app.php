@@ -146,7 +146,7 @@ return [
         App\Providers\RouteServiceProvider::class,
     	
     	// for social login support
-    	//Laravel\Socialite\SocialiteServiceProvider::class,
+    	Laravel\Socialite\SocialiteServiceProvider::class,
 
     ],
 
@@ -197,7 +197,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View'      => Illuminate\Support\Facades\View::class,
     	// for social login support
-    	//'Socialite' => Laravel\Socialite\Facades\Socialite::class,
+    	'Socialite' => Laravel\Socialite\Facades\Socialite::class,
 
     ],
 

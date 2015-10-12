@@ -34,5 +34,12 @@ return [
         'key'    => env('STRIPE_KEY'),
         'secret' => env('STRIPE_SECRET'),
     ],
+	
+	// for FB auth
+	'facebook' => [
+		'client_id' => env('FB_CLIENT_ID'),
+		'client_secret' => env('FB_SECRET_ID'),
+		'redirect' => 'http://'.env('DOMAINNAME'),
+	],
 
 ];

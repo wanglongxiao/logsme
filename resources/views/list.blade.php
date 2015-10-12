@@ -58,12 +58,6 @@ if ($item->tags != "") {
 					</span>
 				</p>
 	 		</div>
-	 		<div
-				class="fb-like col-md-12"
-				data-share="true"
-				data-width="450"
-				data-show-faces="true">
-			</div>
 		</div>
 		</div>
 		</div>
