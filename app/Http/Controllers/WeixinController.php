@@ -236,10 +236,18 @@ class WeixinController extends Controller
 	{
 		$allowMinRatio = 0.25;
 		
-		//if(filter_var($remoteurl, FILTER_VALIDATE_URL) === FALSE)
-		if (FALSE)
-		{
-			// can not handle url like : http://www.teepr.com/wp-content/uploads/2015/10/模特兒.png
+		// judge include Chinese or not
+		if (preg_match("/[\x7f-\xff]/", $remoteurl)) {
+			$includeChinese = true;
+		
+		}else{
+			$includeChinese = false;
+		}
+		
+		// Not include Chinese, judge Url is valid
+		// can not handle url like : http://www.teepr.com/wp-content/uploads/2015/10/模特兒.png
+		if(!$includeChinese && filter_var($remoteurl, FILTER_VALIDATE_URL) === FALSE)
+		{  
 			return FALSE;
 		} else{
 			$ext = pathinfo($remoteurl, PATHINFO_EXTENSION);
@@ -395,25 +403,27 @@ class WeixinController extends Controller
 				// Keep <p><img><br><video>only, upload all images to Weixin domains
 				// upload thumb
 				$createMediaRes = self::createMedia($item ['ogimage']);
-				// ToDo: Judge thumb upload failed or not
-				$thumbmediaid = $createMediaRes[0];
-				
-				// gen newsitem
-				$newsitem = array(
-						'title' => $item ['title'],
-						'thumb_media_id' => $thumbmediaid,
-						'author' => '',
-						'digest' => $item ['description'],
-						'show_cover_pic' => 0,
-						'content' => $html,
-						// update later by config
-						'content_source_url' => "http://".env('DOMAINNAME')."/post/".$item ['id']
-				);
-				
-				array_push($postids, $item ['id']);
-				array_push($thumbids, $thumbmediaid);
-				array_push($news, $newsitem);
-				$mediaids = array_merge($mediaids, $itemMediaids);
+				// Judge thumb upload failed or not
+				if ($createMediaRes != FALSE) {
+					$thumbmediaid = $createMediaRes[0];
+					
+					// gen newsitem
+					$newsitem = array(
+							'title' => $item ['title'],
+							'thumb_media_id' => $thumbmediaid,
+							'author' => '',
+							'digest' => $item ['description'],
+							'show_cover_pic' => 0,
+							'content' => $html,
+							// update later by config
+							'content_source_url' => "http://".env('DOMAINNAME')."/post/".$item ['id']
+					);
+					
+					array_push($postids, $item ['id']);
+					array_push($thumbids, $thumbmediaid);
+					array_push($news, $newsitem);
+					$mediaids = array_merge($mediaids, $itemMediaids);
+				} else Log::error("Upload thumb failed on post : ".$item ['id']);
 			}
 			
 			// submit news

@@ -20,19 +20,6 @@ class PostController extends Controller
 	);
 	
 	/**
-	 * Judge admin user or not
-	 */
-	public static function isAdmin()
-	{
-		$user = Session::get('loginuser');
-		if ($user == env('ADMINEMAIL')) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-	
-	/**
      * Get data from DB
      */
     public static function getListByFilter($terms, $limit = self::ITEMS_PER_PAGE, $offset = 0, $orderby = 'id', $order = 'desc')
@@ -63,8 +50,11 @@ class PostController extends Controller
     		'isapproved' => 1
     	); 
     	$data = self::getListByFilter($terms);
-    	// add QRcode at the end of content
+    	$hashids = new \Hashids\Hashids("", Config::get("weixin.minhashlength"));
     	foreach ($data as $item) {
+    		// id number to hashStr
+    		$item->id = $hashids->encode($item->id);
+    		// add QRcode at the end of content
     		$item->content = $item->content.WeixinController::addQrcode($item->sourcedomain);
     	}
     	 
@@ -105,8 +95,11 @@ class PostController extends Controller
     		$terms["hasvideo"] = 1;
     	}
     	$data = self::getListByFilter($terms);
-    	// add QRcode at the end of content
+    	$hashids = new \Hashids\Hashids("", Config::get("weixin.minhashlength"));
     	foreach ($data as $item) {
+    		// id number to hashStr
+    		$item->id = $hashids->encode($item->id);
+    		// add QRcode at the end of content
     		$item->content = $item->content.WeixinController::addQrcode($item->sourcedomain);
     	}
     
@@ -132,8 +125,11 @@ class PostController extends Controller
    		$data = $query->get();
 	    
 	    if (!$data->isEmpty()) {
-	    	// add QRcode at the end of content
+	    	$hashids = new \Hashids\Hashids("", Config::get("weixin.minhashlength"));
 	    	foreach ($data as $item) {
+	    		// id number to hashStr
+	    		$item->id = $hashids->encode($item->id);
+	    		// add QRcode at the end of content
 	    		$item->content = $item->content.WeixinController::addQrcode($item->sourcedomain);
 	    	}
 	    	return response()->view('list', [ 'data' => $data, 'isadmin' => self::isAdmin() ]);
@@ -145,18 +141,38 @@ class PostController extends Controller
     /**
      * Responds to requests to GET /post/1
      */
-    public static function getPost($id)
+    public static function getPost($id, $type = '')
     {
     	//echo "#### ".$id."<br>";die();
     	$post = new Post;
     	if ($id != null || $id != "") {
+    		$hashids = new \Hashids\Hashids("", Config::get("weixin.minhashlength"));
+    		// hashStr to id number
+    		if (!is_numeric($id)) {
+    			$ids = $hashids->decode($id);
+    			if (isset($ids[0])) {
+    				$id = $ids[0];
+    			}
+    		}
     		$post = Post::findOrFail($id);
+    		$post = $post->attributesToArray();
+    		// add QRcode at the end of content
+    		$post['content'] = $post['content'].WeixinController::addQrcode($post['sourcedomain']);
+    		// id number to hashStr
+    		$post['id'] = $hashids->encode($post['id']);
+    	} else {
+    		$post = $post->attributesToArray();
     	}
-    	$post = $post->attributesToArray();
-    	// add QRcode at the end of content
-    	$post['content'] = $post['content'].WeixinController::addQrcode($post['sourcedomain']);
     	
-    	return response()->view('post', ['data' => $post, 'url' => $post['url'], 'isadmin' => self::isAdmin() ]);
+    	if ($type == "preview") {
+    		$preview = true;
+    		$promolink = '<p><img src="'.Config::get("weixin.qrcodeurl").'"></p><p>'.Config::get("weixin.promourl").'</p>';
+    	} else {
+    		$preview = false;
+    		$promolink = '';
+    	}
+    	
+    	return response()->view('post', ['data' => $post, 'url' => $post['url'], 'isadmin' => self::isAdmin(), 'ispreview' => $preview, 'promolink' => $promolink ]);
     }
     
     /**
@@ -168,10 +184,18 @@ class PostController extends Controller
     	 
     	$post = new Post;
     	if ($id != null || $id != "") {
+    		$hashids = new \Hashids\Hashids("", Config::get("weixin.minhashlength"));
+    		// hashStr to id number
+    		if (!is_numeric($id)) {
+    			$ids = $hashids->decode($id);
+    			if (isset($ids[0])) {
+    				$id = $ids[0];
+    			}
+    		}
     		$post = Post::findOrFail($id);
+    		$post = $post->attributesToArray();
     	}
-    	$post = $post->attributesToArray();
-    	 
+    		 
     	return response()->view('edit', ['data' => $post, 'url' => $post['url'], 'isadmin' => self::isAdmin() ]);
     }
     
@@ -183,6 +207,14 @@ class PostController extends Controller
     	if (!self::isAdmin()) return redirect('/');
     	 
     	if ($id != null || $id != "") {
+    		$hashids = new \Hashids\Hashids("", Config::get("weixin.minhashlength"));
+    		// hashStr to id number
+    		if (!is_numeric($id)) {
+    			$ids = $hashids->decode($id);
+    			if (isset($ids[0])) {
+    				$id = $ids[0];
+    			}
+    		}
     		$post = Post::findOrFail($id);
     		$post->delete();
     	}
@@ -342,6 +374,12 @@ class PostController extends Controller
 	    	//var_dump($res);
 	    	if ($res !== false) {
 	    		//return response()->json($res);
+	    		// zh_TW to zh_CN translate
+	    		if($res ['title'] != "") $res ['title'] = self::translateTwToCn($res ['title']);
+	    		if($res ['description'] != "") $res ['description'] = self::translateTwToCn($res ['description']);
+	    		// Not translation content on Fetching stage
+	    		//if($res ['content'] != "") $res ['content'] = self::translateTwToCn($res ['content']);
+	    		
 	    		return response()->view('edit', ['data' => $res, 'url' => $url, 'isadmin' => self::isAdmin() ]);
 	    	} else {
 	    		return response()->json(['error' => 400]);
@@ -399,6 +437,64 @@ class PostController extends Controller
     		return false;
     	}
     }
+
+    /**
+     * Judge admin user or not
+     */
+    public static function isAdmin()
+    {
+    	$user = Session::get('loginuser');
+    	if ($user == env('ADMINEMAIL')) {
+    		return true;
+    	} else {
+    		return false;
+    	}
+    }
     
+    /**
+     * Google translate zh_TW to zh_CN
+     * Unofficail API, should have quota limitation
+     */
+    public static function translateTwToCn($str)
+    {
+    	// Google
+    	//$postparam = "client=gtx&ie=UTF-8&oe=UTF-8&sl=zh-TW&tl=zh-CN&dt=t&q=".urlencode($str);
+    	// Baidu
+    	$postparam = "client_id=".env('BAIDU_APPID')."&from=yue&to=zh&q=".urlencode($str);
+    	
+    	$ch = curl_init();
+    	curl_setopt($ch, CURLOPT_URL, Config::get("weixin.translateapi"));
+    	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    	curl_setopt($ch, CURLOPT_HEADER, 0);
+    	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    	curl_setopt($ch, CURLOPT_POST, 1);
+    	curl_setopt($ch, CURLOPT_POSTFIELDS, $postparam);
+    	$output = curl_exec($ch);
+    	if(curl_errno($ch))
+    	{
+    		Log::error('Translate Error: '.curl_error($ch));
+    	}
+    	curl_close($ch);
+    	/*
+    	// For Google Translate Api response
+    	// return sample : [[["这","這",,,0]],,"zh-TW"]
+    	// need to resolve ",,," , otherwise json_decode failed
+    	$output = str_replace(",,", ",\"\",", $output);
+    	$output = str_replace(",,", ",\"\",", $output);
+    	*/
+    	$arr = json_decode($output, true);
+    	//var_dump($arr);
+    	
+    	/*
+    	// Parse Google response
+    	if ($arr != NULL && isset($arr[0][0][0])) {
+    		return $arr[0][0][0];
+    	}
+    	*/
+    	if ($arr != NULL && isset($arr["trans_result"][0]["dst"])) {
+    		return $arr["trans_result"][0]["dst"];
+    	} else return $str;
+    	
+    }
 
 }

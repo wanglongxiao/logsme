@@ -37,13 +37,11 @@ if (isset($data)) {
 	//$videos = $data ['videos'];
 }
 
-
 if ($id != "") {
 	$action = "/admin/update";
 } else if ( isset($url) && $url != "") {
 	$action = "/admin/create";
 } else $action = "/admin/fetch";
-
 
 ?>
 

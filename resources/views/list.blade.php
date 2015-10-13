@@ -54,7 +54,7 @@ if ($item->tags != "") {
 						@endif
 					@endif
 					<span style="float:right; margin:0 0 5px 5px;">
-						<a href="#" data-toggle="modal" data-target="#basicModal-{{ $item->id }}">[预览]</a>
+						<a href="/post/{{ $item->id }}/preview" data-toggle="modal" data-target="#basicModal">[预览]</a>
 						<a href='/post/{{ $item->id }}'>[打开]</a>
 						@if ($isadmin)
    						<a href='/admin/edit/{{ $item->id }}'>[Edit]</a>
@@ -66,32 +66,18 @@ if ($item->tags != "") {
 		</div>
 		</div>
 		</div>
+		
+@endforeach
 
 <!-- Modal -->
-<div class="modal fade" id="basicModal-{{ $item->id }}" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+<div class="modal fade" id="basicModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3 class="modal-title" id="myModalLabel">{{ $item->title }}</h3>
-      </div>
-      <div class="modal-body">
-		@if ($tags != 0)
-	    	@foreach ($tags as $tag)
-	    		<a href="/tag/{{ $tag }}" style="float:right; margin:0 0 5px 5px;"><span class="label label-primary">{{ $alltags[$tag] }}</span></a>
-			@endforeach
-		@endif
-		<br>
-		<?php echo $content; ?>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-      </div>
+		<!-- remote content here : /post/id/preview -->
     </div>
   </div>
 </div>
-		
-@endforeach
+
 </div>
 
 @include('footer')

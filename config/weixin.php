@@ -21,6 +21,17 @@ return [
 		'6' => '09:00:00',
 	],
 
+		
+	/*
+	 |--------------------------------------------------------------------------
+	 | Settings
+	 |--------------------------------------------------------------------------
+	 */
+		
+	'minhashlength' => 8,
+	//'translateapi' => 'https://translate.googleapis.com/translate_a/single',
+	'translateapi' => 'http://openapi.baidu.com/public/2.0/bmt/translate',
+	
 	/*
 	|--------------------------------------------------------------------------
 	| Weixin API Related
@@ -53,11 +64,11 @@ return [
 	 */
 	
 	'tags' => [
-		'a' => '男神女神',
-		'b' => '娱乐搞笑',
-		'c' => '世界奇闻',
-		'd' => '可爱动物',
-		'e' => '生活时尚',
+		'girl' => '男神女神',
+		'funny' => '娱乐搞笑',
+		'story' => '世界奇闻',
+		'cute' => '可爱动物',
+		'fashion' => '生活时尚',
 	],
 	
 
@@ -69,5 +80,6 @@ return [
 	
 	'historymsgurl' => 'http://mp.weixin.qq.com/mp/getmasssendmsg?__biz=MzA3MDMyNDI1Nw==#wechat_webview_type=1&wechat_redirect',
 	'qrcodeurl' => 'https://mmbiz.qlogo.cn/mmbiz/6xo6WHaicfzaGszuNnfPyJdvxLws9icdvEb228roB4aA445FkBMqrtDeKqUDM4zGRPbAvwJcY8l6EablGnFSLqww/0?wx_fmt=png',
+	'promourl' => '<a href="weixin://contacts/profile/hotfeed">点击关注 [海外视频精选]</a>',
 		
 ];

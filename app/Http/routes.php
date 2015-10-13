@@ -23,7 +23,7 @@ Route::get('/list', 'PostController@getList');
 
 Route::get('/tag/{id}/{type?}', 'PostController@getTagList');
 
-Route::get('/post/{id}', 'PostController@getPost');
+Route::get('/post/{id}/{type?}', 'PostController@getPost');
 
 Route::get('/howtoplayvideo',  function(){
 	return view('fanqiang');
@@ -42,6 +42,10 @@ Route::get('/admin/delete/{id}', 'PostController@deletePost');
 
 Route::get('/admin/bookmarklet',  function(){
 	return view('bookmarklet');
+});
+
+Route::get('/admin/seeds',  function(){
+	return view('seeds');
 });
 
 

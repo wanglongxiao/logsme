@@ -4,7 +4,7 @@
 
 @if (Session::get('loginuser') != env('ADMINEMAIL'))
 <script>
-	window.location.href = '{{ url("http://".env("DOMAINNAME")) }}'; //using a named route
+	window.location.href = '{{ url("http://".env("DOMAINNAME")) }}';
 </script>
 @endif
 
