@@ -33,6 +33,23 @@
 				}
 			}
 			
+			@media (max-width: 480px) {
+			    .container {
+			      padding:0;
+			      margin:0;
+			    }
+			
+			    body {
+			      padding:0;
+			    }
+			
+			    .navbar-fixed-top, .navbar-fixed-bottom, .navbar-static-top {
+			      margin-left: 0;
+			      margin-right: 0;
+			      margin-bottom:0;
+			    }
+			}
+			
 		</style>
         
 </head>

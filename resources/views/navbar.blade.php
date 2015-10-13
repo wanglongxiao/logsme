@@ -1,7 +1,7 @@
 <nav class="navbar navbar-inverse navbar-fixed-bottom">
   <div class="container">
     <p class="navbar-text navbar-right">
-    	<a href='/'>首页</a> |
+    	&nbsp;&nbsp;&nbsp;&nbsp;<a href='/'>首页</a> |
     	@foreach (Config::get("weixin.tags") as $key => $val)
     	<a href='/tag/{{ $key }}'><?php echo mb_substr($val, -2); ?></a> |
     	@endforeach
