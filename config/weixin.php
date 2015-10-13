@@ -64,11 +64,11 @@ return [
 	 */
 	
 	'tags' => [
-		'girl' => '男神女神',
-		'funny' => '娱乐搞笑',
-		'story' => '世界奇闻',
-		'cute' => '可爱动物',
-		'fashion' => '生活时尚',
+		'boyandgirl' => '男神女神',
+		'coolstory' => '世界奇闻',
+		'funnyent' => '搞笑娱乐',
+		'cuteanimal' => '可爱动物',
+		'lifestyle' => '时尚生活',
 	],
 	
 
