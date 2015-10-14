@@ -328,11 +328,17 @@ class WeixinController extends Controller
 	 */
 	public static function addQrcode($sourcedomain = "")
 	{
+		$firstlvldomainarray = array("com","net","org","biz","edu","gov","info","mobi");
 		$str = "";
 		if($sourcedomain != "") {
 			$arr = explode(".", $sourcedomain);
 			$idx = count($arr) - 2;
 			if ($idx >= 0) {
+				// handle com.cn / net.tw, 2 lvl domain cases
+				if (in_array($arr[$idx], $firstlvldomainarray)) {
+					$idx = $idx - 1;
+				}
+				
 				$str = $str."<p style='text-align:right;color:#d3d3d3;'>来源：".$arr[$idx]."</p>";
 			}
 		}

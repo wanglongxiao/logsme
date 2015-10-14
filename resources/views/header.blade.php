@@ -33,6 +33,19 @@
 				}
 			}
 			
+			@media (max-width: 768px) {
+			    .modal {
+				  text-align: center;
+				}
+				
+				.modal-dialog {
+				  display: inline-block;
+				  width: 80%;
+				  text-align: left;
+				  vertical-align: middle;
+				}
+			}
+			
 			@media (max-width: 480px) {
 			    .container {
 			      padding:0;

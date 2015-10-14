@@ -166,13 +166,11 @@ class PostController extends Controller
     	
     	if ($type == "preview") {
     		$preview = true;
-    		$promolink = '<p><img src="'.Config::get("weixin.qrcodeurl").'"></p><p>'.Config::get("weixin.promourl").'</p>';
     	} else {
     		$preview = false;
-    		$promolink = '';
     	}
     	
-    	return response()->view('post', ['data' => $post, 'url' => $post['url'], 'isadmin' => self::isAdmin(), 'ispreview' => $preview, 'promolink' => $promolink ]);
+    	return response()->view('post', ['data' => $post, 'url' => $post['url'], 'isadmin' => self::isAdmin(), 'ispreview' => $preview ]);
     }
     
     /**
