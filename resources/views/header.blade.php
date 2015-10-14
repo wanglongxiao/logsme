@@ -40,7 +40,7 @@
 				
 				.modal-dialog {
 				  display: inline-block;
-				  width: 80%;
+				  width: 85%;
 				  text-align: left;
 				  vertical-align: middle;
 				}

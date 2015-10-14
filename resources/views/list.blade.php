@@ -54,7 +54,7 @@ if ($item->tags != "") {
 						@endif
 					@endif
 					<span style="float:right; margin:0 0 5px 5px;">
-						<a href="/post/{{ $item->id }}/preview" data-toggle="modal" data-target="#basicModal">[预览]</a>
+						<a href="/post/{{ $item->id }}/preview" data-toggle="modal" data-target="#basicModal-{{ $item->id }}">[预览]</a>
 						<a href='/post/{{ $item->id }}'>[打开]</a>
 						@if ($isadmin)
    						<a href='/admin/edit/{{ $item->id }}'>[Edit]</a>
@@ -66,17 +66,17 @@ if ($item->tags != "") {
 		</div>
 		</div>
 		</div>
-		
-@endforeach
 
 <!-- Modal -->
-<div class="modal fade" id="basicModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+<div class="modal fade" id="basicModal-{{ $item->id }}" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
 		<!-- remote content here : /post/id/preview -->
     </div>
   </div>
 </div>
+		
+@endforeach
 
 </div>
 
