@@ -537,6 +537,7 @@ class PostController extends Controller
     	$meta = $meta."<meta property='og:url' content='".$url."' />\n";
     	$meta = $meta."<meta property='og:title' content='".$title."' />\n";
     	$meta = $meta."<meta property='og:description' content='".$desc."' />\n";
+    	$meta = $meta."<meta property='og:image' content='".$image."' />\n";
     	$meta = $meta."<meta property='og:site_name' content='".env("DOMAINNAME")."'/>\n";
     	$meta = $meta."<meta property='fb:app_id' content='".env("FB_CLIENT_ID")."' />\n";
     	
