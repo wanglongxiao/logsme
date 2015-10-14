@@ -57,8 +57,9 @@ class PostController extends Controller
     		// add QRcode at the end of content
     		$item->content = $item->content.WeixinController::addQrcode($item->sourcedomain);
     	}
+    	$meta = self::getHtmlMeta('list', '', '/', '');
     	 
-    	return response()->view('list', [ 'data' => $data, 'isadmin' => self::isAdmin() ])->header('Content-Type', $type);
+    	return response()->view('list', [ 'data' => $data, 'isadmin' => self::isAdmin(), 'meta' => $meta ])->header('Content-Type', $type);
     }
     
     /**
@@ -102,8 +103,9 @@ class PostController extends Controller
     		// add QRcode at the end of content
     		$item->content = $item->content.WeixinController::addQrcode($item->sourcedomain);
     	}
+    	$meta = self::getHtmlMeta('list', '', '/list', '');
     
-    	return response()->view('list', [ 'data' => $data, 'isadmin' => self::isAdmin() ]);
+    	return response()->view('list', [ 'data' => $data, 'isadmin' => self::isAdmin(), 'meta' => $meta ]);
     }
     
     /**
@@ -132,7 +134,8 @@ class PostController extends Controller
 	    		// add QRcode at the end of content
 	    		$item->content = $item->content.WeixinController::addQrcode($item->sourcedomain);
 	    	}
-	    	return response()->view('list', [ 'data' => $data, 'isadmin' => self::isAdmin() ]);
+	    	$meta = self::getHtmlMeta('list', '', '/tag/'.$tag, Config::get("weixin.tags")[$tag]);
+	    	return response()->view('list', [ 'data' => $data, 'isadmin' => self::isAdmin(), 'meta' => $meta ]);
 	    } else {
 	    	return redirect('/');
 	    }
@@ -140,6 +143,7 @@ class PostController extends Controller
     
     /**
      * Responds to requests to GET /post/1
+     * $type = [preview | SEO-Title]
      */
     public static function getPost($id, $type = '')
     {
@@ -160,8 +164,11 @@ class PostController extends Controller
     		$post['content'] = $post['content'].WeixinController::addQrcode($post['sourcedomain']);
     		// id number to hashStr
     		$post['id'] = $hashids->encode($post['id']);
+    		// gen html meta
+    		$meta = self::getHtmlMeta('post', $post);
     	} else {
     		$post = $post->attributesToArray();
+    		$meta = "";
     	}
     	
     	if ($type == "preview") {
@@ -170,7 +177,7 @@ class PostController extends Controller
     		$preview = false;
     	}
     	
-    	return response()->view('post', ['data' => $post, 'url' => $post['url'], 'isadmin' => self::isAdmin(), 'ispreview' => $preview ]);
+    	return response()->view('post', ['data' => $post, 'url' => $post['url'], 'isadmin' => self::isAdmin(), 'ispreview' => $preview, 'meta' => $meta ]);
     }
     
     /**
@@ -493,6 +500,52 @@ class PostController extends Controller
     		return $arr["trans_result"][0]["dst"];
     	} else return $str;
     	
+    }
+    
+    /**
+     * Generate Html Meta for type = [list|post] pages, including OG / SEO Metas
+     */
+    public static function getHtmlMeta($type='post', $postdata='', $listurl='', $tag='')
+    {
+    	$meta = "";
+    	
+    	if ($type == 'post' || $type == 'list') {
+    		if ($type == 'post') {
+    			// encode ' " < > from title and description
+    			$posttitle = htmlspecialchars($postdata["title"]);
+    			$postdescription = htmlspecialchars($postdata["description"]);
+    			$url = "http://".env("DOMAINNAME")."/post/".$postdata["id"];
+    			$canonicalurl = $url."/".$posttitle;
+    			$title = Config::get('weixin.defaulthtmltitle')." ".$posttitle;
+    			$desc = $postdescription;
+    			$image = $postdata["ogimage"];
+    			$pagetype = "article";
+    		} else {
+    			$url = "http://".env("DOMAINNAME").$listurl;
+    			$canonicalurl = $url;
+    			$title = Config::get('weixin.defaulthtmltitle')." ".$tag;
+    			$desc = Config::get('weixin.defaulthtmldescription');
+    			$image = Config::get('weixin.defaulthtmlogimage');
+    			$pagetype = "website";		
+    		}
+    	
+    	$meta = $meta."<meta name='keywords' content='".Config::get('weixin.defaulthtmlkeywords')."' />\n";
+    	$meta = $meta."<meta name='description' content='".$title." ".$desc."' />\n";
+    	$meta = $meta."<meta name='robots' content='index,follow' />\n";
+    	
+       	$meta = $meta."<meta property='og:type' content='".$pagetype."' />\n";
+    	$meta = $meta."<meta property='og:url' content='".$url."' />\n";
+    	$meta = $meta."<meta property='og:title' content='".$title."' />\n";
+    	$meta = $meta."<meta property='og:description' content='".$desc."' />\n";
+    	$meta = $meta."<meta property='og:site_name' content='".env("DOMAINNAME")."'/>\n";
+    	$meta = $meta."<meta property='fb:app_id' content='".env("FB_CLIENT_ID")."' />\n";
+    	
+    	$meta = $meta."<title>".$title."</title>\n";
+    	
+    	$meta = $meta."<link rel='canonical' href='".$canonicalurl."' />\n";
+    	}
+    	
+    	return $meta;
     }
 
 }

@@ -24,11 +24,20 @@ return [
 		
 	/*
 	 |--------------------------------------------------------------------------
-	 | Settings
+	 | Site/Html Settings
 	 |--------------------------------------------------------------------------
 	 */
 		
+	'defaulthtmltitle' => 'LOGSME 海外精选',
+	
+	'defaulthtmlkeywords' => '海外,娱乐,搞笑,美女,时尚,视频,动图,可爱,动物,最新,科技,恶搞,oversea,global,girl,video,fun,funny,geeky,cute,gif',
+	
+	'defaulthtmldescription' => '海外视频,酷炫组图,可爱动物,科技潮物,恶搞GIF,每天更新,刷屏一分钟开心一整天',
+
+	'defaulthtmlogimage' => 'http://'.env("DOMAINNAME").'/img/320_320.png',
+		
 	'minhashlength' => 8,
+	
 	//'translateapi' => 'https://translate.googleapis.com/translate_a/single',
 	'translateapi' => 'http://openapi.baidu.com/public/2.0/bmt/translate',
 	
@@ -79,7 +88,9 @@ return [
 	 */
 	
 	'historymsgurl' => 'http://mp.weixin.qq.com/mp/getmasssendmsg?__biz=MzA3MDMyNDI1Nw==#wechat_webview_type=1&wechat_redirect',
+	
 	'qrcodeurl' => 'https://mmbiz.qlogo.cn/mmbiz/6xo6WHaicfzaGszuNnfPyJdvxLws9icdvEb228roB4aA445FkBMqrtDeKqUDM4zGRPbAvwJcY8l6EablGnFSLqww/0?wx_fmt=png',
+	
 	'promourl' => '<a href="weixin://contacts/profile/hotfeed">点击关注 [海外视频精选]</a>',
 		
 ];
