@@ -39,16 +39,15 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 		 		<div class="media">
 				  <div class="media-body">
 				  	<h3 class="media-heading">{{ $data['title'] }}</h3>
-				    @if ($tags != 0)
-				    @foreach ($tags as $tag)
-				    	<a href="/tag/{{ $tag }}" style="float:left; margin:0 0 5px 5px;"><span class="label label-primary">{{ $alltags[$tag] }}</span></a>
-				    @endforeach
-				    @endif
-				    <p style="float:right; margin:0 0 5px 5px;"><?php echo Config::get("weixin.promourl"); ?></p>
-				    @if ($isadmin)
+				  	@if ($isadmin)
 				  	<a href='/admin/delete/{{ $data["id"] }}' style="float:right; margin:0 0 5px 5px;">[Delete]</a>
 				  	<a href='/admin/edit/{{ $data["id"] }}' style="float:right; margin:0 0 5px 5px;">[Edit]</a>
 				  	@endif
+				    @if ($tags != 0)
+				    @foreach ($tags as $tag)
+				    	<a href="/tag/{{ $tag }}" style="float:right; margin:0 0 5px 5px;"><span class="label label-primary">{{ $alltags[$tag] }}</span></a>
+				    @endforeach
+				    @endif
 				    <hr>
 				    <?php echo $content; ?>
 				  </div>
@@ -83,7 +82,13 @@ if (isset($_SERVER['HTTP_REFERER'])) {
       
 	@else
 	
-		<html><body><?php echo ('<p>'.Config::get("weixin.promourl").'</p>'); ?></body></html>
+		<html>
+		<body>
+		<script>
+			window.location.href = '{{ url("http://".env("DOMAINNAME")) }}';
+		</script>
+		</body>
+		</html>
 	
 	@endif
 	
