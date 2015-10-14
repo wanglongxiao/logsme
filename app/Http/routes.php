@@ -30,6 +30,11 @@ Route::get('/howtoplayvideo',  function(){
 });
 
 
+Route::get('/sitemap',  function(){
+	return response()->view('sitemap')->header('Content-Type', 'text/xml');
+});
+
+
 Route::any('/admin/fetch', 'PostController@fetchPost');
 
 Route::get('/admin/edit/{id}', 'PostController@getPostToEdit');

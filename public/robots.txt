@@ -1,2 +1,7 @@
 User-agent: *
-Disallow: /
+Disallow: /auth/*
+Disallow: /admin/*
+Disallow: /weixinapi/*
+Disallow: /howtoplayvideo
+Disallow: /list?*
+Disallow: /?
