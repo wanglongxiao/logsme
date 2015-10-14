@@ -1,7 +1,10 @@
 User-agent: *
+
 Disallow: /auth/*
 Disallow: /admin/*
 Disallow: /weixinapi/*
 Disallow: /howtoplayvideo
 Disallow: /list?*
 Disallow: /?
+
+Sitemap: http://www.logs.me/sitemap
