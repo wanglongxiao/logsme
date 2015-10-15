@@ -44,12 +44,11 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 				  	<hr>
 				  	@if ($tags != 0)
 				    @foreach ($tags as $tag)
-				    	<a href="/tag/{{ $tag }}" style="font-size:20px;"><span class="label label-primary">{{ $alltags[$tag] }}</span></a>
+				    	<a href="/tag/{{ $tag }}" style="font-size:18px;"><span class="label label-primary">{{ $alltags[$tag] }}</span></a>
 				    @endforeach
 				    @endif
 				    @if ($isadmin)
-				  	<a href='/admin/delete/{{ $data["id"] }}'>[Delete]</a>
-				  	<a href='/admin/edit/{{ $data["id"] }}'>[Edit]</a>
+				  	<a href='/admin/edit/{{ $data["id"] }}' style="font-size:18px;">[Edit]</a>
 				  	@endif
 				    <div class="bdsharebuttonbox" style="float:right;margin:0 0 5px 5px;">
 						<a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
@@ -94,7 +93,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
       <div class="modal-body">
 		@if ($tags != 0)
 	    	@foreach ($tags as $tag)
-	    		<a href="/tag/{{ $tag }}" style="float:right; margin:0 0 5px 5px;"><span class="label label-primary">{{ $alltags[$tag] }}</span></a>
+	    		<a href="/tag/{{ $tag }}" style="float:right; font-size:18px;"><span class="label label-primary">{{ $alltags[$tag] }}</span></a>
 			@endforeach
 		@endif
 		<br><br>

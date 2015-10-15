@@ -41,11 +41,11 @@ if ($item->tags != "") {
 	 		 		
 	 		 		@if ($tags != 0)
 	    			@foreach ($tags as $tag)
-	    				<a href="/tag/{{ $tag }}" style="font-size:20px;"><span class="label label-primary">{{ $alltags[$tag] }}</span></a>
+	    				<a href="/tag/{{ $tag }}" style="font-size:18px;"><span class="label label-primary">{{ $alltags[$tag] }}</span></a>
 					@endforeach
 					@endif
 					
-					<a href="/post/{{ $item->id }}/preview" data-toggle="modal" data-target="#basicModal-{{ $item->id }}" style="font-size:20px;"><span class="label label-info">预览文章</span></a>	
+					<a href="/post/{{ $item->id }}/preview" data-toggle="modal" data-target="#basicModal-{{ $item->id }}" style="font-size:18px;"><span class="label label-info">预览文章</span></a>	
 					
 					<div class="bdsharebuttonbox" style="float:right;margin:0 0 5px 5px;">
 						<a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信" data-id="{{ $item->id }}"></a>
@@ -55,19 +55,7 @@ if ($item->tags != "") {
 					</div>
 
 					@if ($isadmin)
-						<br>
-						@if ($item->ispublished == 0)
-						<a href='/list?ispublished=0'><span class="label label-default">NotPublish</span></a>
-						@else
-						<a href='/list?ispublished=1'><span class="label label-success">Published</span></a>
-						@endif
-						@if ($item->isfeatured == 0)
-						<a href='/list?isfeatured=0'><span class="label label-default">NotFeature</span></a>
-						@else
-						<a href='/list?isfeatured=1'><span class="label label-primary">Featured</span></a>
-						@endif
-						<a href='/admin/edit/{{ $item->id }}'>[Edit]</a>
-						<a href='/admin/delete/{{ $item->id }}'>[Delete]</a>
+						<a href='/admin/edit/{{ $item->id }}' style="font-size:18px;">[Edit]</a>
 					@endif
 				</div>
 	 		</div>
