@@ -59,7 +59,7 @@
 				}
 				.modal-dialog {
 				  display: inline-block;
-				  width: 85%;
+				  /* width: 90%; */
 				  text-align: left;
 				  vertical-align: middle;
 				}
@@ -79,6 +79,8 @@
 			      margin-bottom:0;
 			    }
 			}
+			
+			a { text-decoration: none !important; }
 			
 		</style>       
 </head>

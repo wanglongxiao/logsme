@@ -73,7 +73,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 	    		<a href="/tag/{{ $tag }}" style="float:right; margin:0 0 5px 5px;"><span class="label label-primary">{{ $alltags[$tag] }}</span></a>
 			@endforeach
 		@endif
-		<br>
+		<br><br>
 		<?php echo $content; ?>
       </div>
       <div class="modal-footer">

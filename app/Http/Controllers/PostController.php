@@ -512,11 +512,11 @@ class PostController extends Controller
     	if ($type == 'post' || $type == 'list') {
     		if ($type == 'post') {
     			// encode ' " < > from title and description
-    			$posttitle = htmlspecialchars($postdata["title"]);
+    			$pagetitle = htmlspecialchars($postdata["title"]);
     			$postdescription = htmlspecialchars($postdata["description"]);
     			$url = "http://".env("DOMAINNAME")."/post/".$postdata["id"];
-    			$canonicalurl = $url."/".$posttitle;
-    			$title = Config::get('weixin.defaulthtmltitle')." ".$posttitle;
+    			$canonicalurl = $url."/".$pagetitle;
+    			$title = Config::get('weixin.defaulthtmltitle')." ".$pagetitle;
     			$desc = $postdescription;
     			$image = $postdata["ogimage"];
     			$pagetype = "article";
@@ -524,6 +524,7 @@ class PostController extends Controller
     			$url = "http://".env("DOMAINNAME").$listurl;
     			$canonicalurl = $url;
     			$title = Config::get('weixin.defaulthtmltitle')." ".$tag;
+    			$pagetitle = $title;
     			$desc = Config::get('weixin.defaulthtmldescription');
     			$image = Config::get('weixin.defaulthtmlogimage');
     			$pagetype = "website";		
@@ -541,7 +542,7 @@ class PostController extends Controller
     	$meta = $meta."<meta property='og:site_name' content='".env("DOMAINNAME")."'/>\n";
     	$meta = $meta."<meta property='fb:app_id' content='".env("FB_CLIENT_ID")."' />\n";
     	
-    	$meta = $meta."<title>".$title."</title>\n";
+    	$meta = $meta."<title>".$pagetitle."</title>\n";
     	
     	$meta = $meta."<link rel='canonical' href='".$canonicalurl."' />\n";
     	}

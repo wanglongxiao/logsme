@@ -28,12 +28,16 @@ if ($item->tags != "") {
 
 		<div class="row">
 	  		<div class="col-md-12">
-	  			<a href='/post/{{ $item->id }}'><img src='{{ $item->ogimage }}' class="img-responsive"></a>
+	  			<a href="/post/{{ $item->id }}/preview" data-toggle="modal" data-target="#basicModal-{{ $item->id }}"><img src='{{ $item->ogimage }}' class="img-responsive"></a>
 	  		</div>
 	  	</div>
 	  	<div class="row">
 	 		<div class="col-md-12">
-	 		 	<p class="lead"><h3>{{ $item->title }}</h3></p>
+	 			<div>
+	 		 	<a href="/post/{{ $item->id }}/preview" data-toggle="modal" data-target="#basicModal-{{ $item->id }}"><h3>{{ $item->title }}</h3></a>
+	 		 	</div>
+	 		 	<!-- For SEO -->
+	 		 	<p class="hide"><a href='/post/{{ $item->id }}'>{{ $item->title }}</a></p>
 	 		 	<p>{{ $item->description }}</p>
 	 		 	<p>
 	 		 		@if ($tags != 0)
@@ -54,8 +58,6 @@ if ($item->tags != "") {
 						@endif
 					@endif
 					<span style="float:right; margin:0 0 5px 5px;">
-						<a href="/post/{{ $item->id }}/preview" data-toggle="modal" data-target="#basicModal-{{ $item->id }}">[预览]</a>
-						<a href='/post/{{ $item->id }}'>[打开]</a>
 						@if ($isadmin)
    						<a href='/admin/edit/{{ $item->id }}'>[Edit]</a>
 						<a href='/admin/delete/{{ $item->id }}'>[Delete]</a>
@@ -79,5 +81,23 @@ if ($item->tags != "") {
 @endforeach
 
 </div>
+
+<script type="text/javascript">
+$('div.modal').on('show.bs.modal', function() {
+	var modal = this;
+	var hash = modal.id;
+	window.location.hash = hash;
+	window.onhashchange = function() {
+		if (!location.hash){
+			$(modal).modal('hide');
+		}
+	}
+});
+
+$('div.modal').on('hide', function() {
+	var hash = this.id;
+	history.pushState('', document.title, window.location.pathname);
+});
+</script>
 
 @include('footer')

@@ -73,7 +73,7 @@ return [
 	 */
 	
 	'tags' => [
-		'boyandgirl' => '男神女神',
+		'boyandgirl' => '型男美女',
 		'coolstory' => '世界奇闻',
 		'funnyent' => '搞笑娱乐',
 		'cuteanimal' => '可爱动物',
