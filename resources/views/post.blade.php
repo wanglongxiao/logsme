@@ -15,6 +15,8 @@ if ($data['tags'] != "") {
 	$tags = array_intersect($tags,array_keys($alltags));
 }
 
+$url = "http://".env("DOMAINNAME")."/post/".$data['id'];
+
 // get referer domain
 $refererdomain = "";
 if (isset($_SERVER['HTTP_REFERER'])) {
@@ -39,16 +41,18 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 		 		<div class="media">
 				  <div class="media-body">
 				  	<h3 class="media-heading">{{ $data['title'] }}</h3>
-				  	@if ($isadmin)
-				  	<a href='/admin/delete/{{ $data["id"] }}' style="float:right; margin:0 0 5px 5px;">[Delete]</a>
-				  	<a href='/admin/edit/{{ $data["id"] }}' style="float:right; margin:0 0 5px 5px;">[Edit]</a>
-				  	@endif
-				    @if ($tags != 0)
+				  	<hr>
+				  	@if ($tags != 0)
 				    @foreach ($tags as $tag)
-				    	<a href="/tag/{{ $tag }}" style="float:right; margin:0 0 5px 5px;"><span class="label label-primary">{{ $alltags[$tag] }}</span></a>
+				    	<a href="/tag/{{ $tag }}" style="margin:0 0 5px 5px;"><span class="label label-primary">{{ $alltags[$tag] }}</span></a>
 				    @endforeach
 				    @endif
-				    <hr>
+				    @if ($isadmin)
+				  	<a href='/admin/delete/{{ $data["id"] }}' style="margin:0 0 5px 5px;">[Delete]</a>
+				  	<a href='/admin/edit/{{ $data["id"] }}' style="margin:0 0 5px 5px;">[Edit]</a>
+				  	@endif
+				    <div class="bdsharebuttonbox" style="float:right;"><a href="{{$url}}" class="bds_more" data-cmd="more"></a><a href="{{$url}}" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a><a href="{{$url}}" class="bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a><a href="{{$url}}" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a><a href="{{$url}}" class="bds_fbook" data-cmd="fbook" title="分享到Facebook"></a></div>
+				    <br><br>
 				    <?php echo $content; ?>
 				  </div>
 				</div>

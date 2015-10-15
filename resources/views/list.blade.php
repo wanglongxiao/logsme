@@ -13,6 +13,8 @@ $content = str_replace("&amp;","&",$content);
 $content = str_replace("&quot;","'",$content);
 $content = str_replace("&nbsp;"," ",$content);
 
+$url = "http://".env("DOMAINNAME")."/post/".$item->id;
+
 // parser tags
 $alltags = Config::get("weixin.tags");
 $tags = "";
@@ -28,24 +30,27 @@ if ($item->tags != "") {
 
 		<div class="row">
 	  		<div class="col-md-12">
-	  			<a href="/post/{{ $item->id }}/preview" data-toggle="modal" data-target="#basicModal-{{ $item->id }}"><img src='{{ $item->ogimage }}' class="img-responsive"></a>
+	  			<a href="/post/{{ $item->id }}"><img src='{{ $item->ogimage }}' class="img-responsive"></a>
 	  		</div>
 	  	</div>
 	  	<div class="row">
 	 		<div class="col-md-12">
-	 			<div>
-	 		 	<a href="/post/{{ $item->id }}/preview" data-toggle="modal" data-target="#basicModal-{{ $item->id }}"><h3>{{ $item->title }}</h3></a>
-	 		 	</div>
-	 		 	<!-- For SEO -->
-	 		 	<p class="hide"><a href='/post/{{ $item->id }}'>{{ $item->title }}</a></p>
+	 			<p><a href="/post/{{ $item->id }}"><h3>{{ $item->title }}</h3></a></p>
 	 		 	<p>{{ $item->description }}</p>
-	 		 	<p>
+	 		 	<div>
+	 		 		
 	 		 		@if ($tags != 0)
 	    			@foreach ($tags as $tag)
 	    				<a href="/tag/{{ $tag }}"><span class="label label-primary">{{ $alltags[$tag] }}</span></a>
 					@endforeach
 					@endif
+					
+					<a href="/post/{{ $item->id }}/preview" data-toggle="modal" data-target="#basicModal-{{ $item->id }}" class="label label-info" role="span">预览文章</a>	
+					
+					<div class="bdsharebuttonbox" style="float:right;"><a href="{{$url}}" class="bds_more" data-cmd="more"></a><a href="{{$url}}" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a><a href="{{$url}}" class="bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a><a href="{{$url}}" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a><a href="{{$url}}" class="bds_fbook" data-cmd="fbook" title="分享到Facebook"></a></div>
+					
 					@if ($isadmin)
+						<br>
 						@if ($item->ispublished == 0)
 						<a href='/list?ispublished=0'><span class="label label-default">NotPublish</span></a>
 						@else
@@ -56,14 +61,10 @@ if ($item->tags != "") {
 						@else
 						<a href='/list?isfeatured=1'><span class="label label-primary">Featured</span></a>
 						@endif
-					@endif
-					<span style="float:right; margin:0 0 5px 5px;">
-						@if ($isadmin)
-   						<a href='/admin/edit/{{ $item->id }}'>[Edit]</a>
+						<a href='/admin/edit/{{ $item->id }}'>[Edit]</a>
 						<a href='/admin/delete/{{ $item->id }}'>[Delete]</a>
-						@endif
-					</span>
-				</p>
+					@endif
+				</div>
 	 		</div>
 		</div>
 		</div>

@@ -53,17 +53,19 @@
 				}
 			}
 			
+			/*
 			@media (max-width: 768px) {
 			    .modal {
 				  text-align: center;
 				}
 				.modal-dialog {
 				  display: inline-block;
-				  /* width: 90%; */
+				  width: 90%;
 				  text-align: left;
 				  vertical-align: middle;
 				}
 			}
+			*/
 			
 			@media (max-width: 480px) {
 			    .container {
@@ -82,9 +84,12 @@
 			
 			a { text-decoration: none !important; }
 			
-		</style>       
-</head>
-<body>
+		</style>
+	
+	<!-- baidu share code -->
+	<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"1","bdMiniList":["copy","mail","weixin","sqq","qzone","tsina","fbook","twi"],"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+	
+	<!-- facebook SDK -->
 	<script>
 	  window.fbAsyncInit = function() {
 	    FB.init({
@@ -101,7 +106,9 @@
 	     js.src = "//connect.facebook.net/en_US/sdk.js";
 	     fjs.parentNode.insertBefore(js, fjs);
 	   }(document, 'script', 'facebook-jssdk'));
-	</script>
-	<div class="container">
-		<a href="/"><img src="/img/logo.jpg" class="img-responsive"></a>
-	</div>
+	</script> 
+</head>
+<body>	
+<div class="container">
+	<a href="/"><img src="/img/logo.jpg" class="img-responsive"></a>
+</div>
