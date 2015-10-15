@@ -51,8 +51,13 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 				  	<a href='/admin/delete/{{ $data["id"] }}' style="margin:0 0 5px 5px;">[Delete]</a>
 				  	<a href='/admin/edit/{{ $data["id"] }}' style="margin:0 0 5px 5px;">[Edit]</a>
 				  	@endif
-				    <div class="bdsharebuttonbox" style="float:right;"><a href="{{$url}}" class="bds_more" data-cmd="more"></a><a href="{{$url}}" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a><a href="{{$url}}" class="bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a><a href="{{$url}}" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a><a href="{{$url}}" class="bds_fbook" data-cmd="fbook" title="分享到Facebook"></a></div>
-				    <br><br>
+				    <div class="bdsharebuttonbox" style="float:right;margin:0 0 5px 5px;">
+						<a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+						<a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ"></a>
+						<a href="#" class="bds_tsina" data-cmd="tsina" title="分享到微博"></a>
+						<a href="#" class="bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+					</div>
+					<br><br>
 				    <?php echo $content; ?>
 				  </div>
 				</div>
@@ -60,6 +65,21 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			</div>
 		</div>
 	</div>
+	<!-- for BaiduShare -->
+	<script>
+		window._bd_share_config={
+			"common":{
+				"bdUrl" : "{{ $url }}", 
+				"bdSnsKey":{},
+				"bdText":"",
+				"bdPic":"",
+				"bdStyle":"1",
+				"bdSize":"16"
+			},
+			"share":{}
+		};
+		with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+	</script>
 	
 	@include('footer')
 
