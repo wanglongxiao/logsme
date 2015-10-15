@@ -45,10 +45,11 @@ if ($item->tags != "") {
 					@endforeach
 					@endif
 					
-					<a href="/post/{{ $item->id }}/preview" data-toggle="modal" data-target="#basicModal-{{ $item->id }}" style="font-size:18px;"><span class="label label-info">预览</span></a>	
+					<!-- hide preview on mobile -->
+					<a href="/post/{{ $item->id }}/preview" data-toggle="modal" data-target="#basicModal-{{ $item->id }}" style="font-size:18px;"><span class="label label-info" style="display:none;">预览文章</span></a>	
 					
 					<div class="bdsharebuttonbox" style="float:right;margin:0 0 5px 5px;">
-						<a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信" data-id="{{ $item->id }}"></a>
+						<a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信" data-id="{{ $item->id }}" style="display:none;"></a>
 						<a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间" data-id="{{ $item->id }}"></a>
 						<a href="#" class="bds_tsina" data-cmd="tsina" title="分享到微博" data-id="{{ $item->id }}"></a>
 						<a href="#" class="bds_fbook" data-cmd="fbook" title="分享到Facebook" data-id="{{ $item->id }}"></a>
@@ -132,6 +133,26 @@ $('div.modal').on('hide', function() {
         };
         //插件的JS加载部分
         with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+<!-- for hide/show weixin share & preview features -->
+<script type="text/javascript"> 
+	window.onload = function(){ 
+		if(!isMobile()){ 
+			var previewLabel = document.getElementsByClassName("label-info")
+			var i;
+			for (i = 0; i < previewLabel.length; i++) {
+			    previewLabel[i].setAttribute("style", "display:inline;");
+			}
+		}
+		if(!isWeixin()){
+			var previewLabel = document.getElementsByClassName("bds_weixin")
+			var i;
+			for (i = 0; i < previewLabel.length; i++) {
+			    previewLabel[i].setAttribute("style", "display:inline;");
+			}
+		}
+	}
 </script>
 
 @include('footer')

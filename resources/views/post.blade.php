@@ -51,7 +51,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 				  	<a href='/admin/edit/{{ $data["id"] }}' style="font-size:18px;">[Edit]</a>
 				  	@endif
 				    <div class="bdsharebuttonbox" style="float:right;margin:0 0 5px 5px;">
-						<a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+						<a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信" style="display:none;"></a>
 						<a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ"></a>
 						<a href="#" class="bds_tsina" data-cmd="tsina" title="分享到微博"></a>
 						<a href="#" class="bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
@@ -64,8 +64,9 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			</div>
 		</div>
 	</div>
+	
 	<!-- for BaiduShare -->
-	<script>
+	<script type="text/javascript">
 		window._bd_share_config={
 			"common":{
 				"bdUrl" : "{{ $url }}", 
@@ -78,6 +79,19 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			"share":{}
 		};
 		with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+	</script>
+	
+	<!-- for hide/show weixin share & preview features -->
+	<script type="text/javascript"> 
+		window.onload = function(){ 
+			if(!isWeixin()){
+				var previewLabel = document.getElementsByClassName("bds_weixin")
+				var i;
+				for (i = 0; i < previewLabel.length; i++) {
+				    previewLabel[i].setAttribute("style", "display:inline;");
+				}
+			}
+		}
 	</script>
 	
 	@include('footer')
