@@ -45,7 +45,7 @@ if ($item->tags != "") {
 					@endforeach
 					@endif
 					
-					<a href="/post/{{ $item->id }}/preview" data-toggle="modal" data-target="#basicModal-{{ $item->id }}" style="font-size:18px;"><span class="label label-info">预览文章</span></a>	
+					<a href="/post/{{ $item->id }}/preview" data-toggle="modal" data-target="#basicModal-{{ $item->id }}" style="font-size:18px;"><span class="label label-info">预览</span></a>	
 					
 					<div class="bdsharebuttonbox" style="float:right;margin:0 0 5px 5px;">
 						<a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信" data-id="{{ $item->id }}"></a>

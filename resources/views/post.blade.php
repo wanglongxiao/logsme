@@ -100,7 +100,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 		<?php echo $content; ?>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
       </div>
       
 	@else
