@@ -41,11 +41,11 @@ if ($item->tags != "") {
 	 		 		
 	 		 		@if ($tags != 0)
 	    			@foreach ($tags as $tag)
-	    				<a href="/tag/{{ $tag }}"><span class="label label-primary">{{ $alltags[$tag] }}</span></a>
+	    				<a href="/tag/{{ $tag }}" style="font-size:20px;"><span class="label label-primary">{{ $alltags[$tag] }}</span></a>
 					@endforeach
 					@endif
 					
-					<a href="/post/{{ $item->id }}/preview" data-toggle="modal" data-target="#basicModal-{{ $item->id }}" class="label label-info" role="span">预览文章</a>	
+					<a href="/post/{{ $item->id }}/preview" data-toggle="modal" data-target="#basicModal-{{ $item->id }}" style="font-size:20px;"><span class="label label-info">预览文章</span></a>	
 					
 					<div class="bdsharebuttonbox" style="float:right;margin:0 0 5px 5px;">
 						<a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信" data-id="{{ $item->id }}"></a>
@@ -139,7 +139,7 @@ $('div.modal').on('hide', function() {
     			"bdText":"",
     			"bdPic":"",
     			"bdStyle":"1",
-    			"bdSize":"16"
+    			"bdSize":"24"
             }, "share": {}
         };
         //插件的JS加载部分
