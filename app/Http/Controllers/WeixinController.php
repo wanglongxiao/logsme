@@ -404,7 +404,7 @@ class WeixinController extends Controller
 				$itemMediaids = array();
 				$contentRes = self::convertToWxContent($item ['content']);
 				$html = $contentRes[0];
-				$html = $html.self::addQrcode($item ['$sourcedomain']);
+				$html = $html.self::addQrcode($item ['sourcedomain']);
 				$itemMediaids = $contentRes[1];
 				// Make a Weixin allowed content format. 
 				// Keep <p><img><br><video>only, upload all images to Weixin domains
