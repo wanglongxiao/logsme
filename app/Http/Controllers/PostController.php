@@ -185,7 +185,7 @@ class PostController extends Controller
      */
     public static function getPostToEdit($id)
     {
-    	if (!self::isAdmin()) return redirect('/');
+    	//if (!self::isAdmin()) return redirect('/');
     	 
     	$post = new Post;
     	if ($id != null || $id != "") {
@@ -209,7 +209,7 @@ class PostController extends Controller
      */
     public static function deletePost($id)
     {
-    	if (!self::isAdmin()) return redirect('/');
+    	//if (!self::isAdmin()) return redirect('/');
     	 
     	if ($id != null || $id != "") {
     		$hashids = new \Hashids\Hashids("", Config::get("weixin.minhashlength"));
@@ -232,7 +232,7 @@ class PostController extends Controller
      */
     public static function updateByIds($terms, $ids)
     {
-    	if (!self::isAdmin()) return redirect('/');
+    	//if (!self::isAdmin()) return redirect('/');
     	
     	if (isset($terms) && is_array($terms) && isset($ids) && is_array($ids)) {
     		/*
@@ -255,7 +255,7 @@ class PostController extends Controller
      */
     public static function setApprovedById($id)
     {
-    	if (!self::isAdmin()) return redirect('/');
+    	//if (!self::isAdmin()) return redirect('/');
     	
     	$tearms = array(
     		'isapproved' => 1
@@ -270,7 +270,7 @@ class PostController extends Controller
      */
     public static function setUnPublishedById($id)
     {
-    	if (!self::isAdmin()) return redirect('/');
+    	//if (!self::isAdmin()) return redirect('/');
     	
     	$tearms = array(
     			'ispublished' => 0
@@ -285,7 +285,7 @@ class PostController extends Controller
      */
     public function createPost(Request $request)
     {
-    	if (!self::isAdmin()) return redirect('/');
+    	//if (!self::isAdmin()) return redirect('/');
     	 
     	$post = Post::firstOrNew(['url' => $request->url]);
     	//$post = new Post;
@@ -328,7 +328,7 @@ class PostController extends Controller
     */
     public function updatePost(Request $request)
     {
-    	if (!self::isAdmin()) return redirect('/');
+    	//if (!self::isAdmin()) return redirect('/');
     	
 	    if ($request->id != null && $request->id != "") {
 	    
@@ -367,7 +367,7 @@ class PostController extends Controller
      */
     public function fetchPost(Request $request)
     {
-    	if (!self::isAdmin()) return redirect('/');
+    	//if (!self::isAdmin()) return redirect('/');
     	
     	$url = $request->url;
     	
