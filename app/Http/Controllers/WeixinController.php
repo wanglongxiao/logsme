@@ -436,6 +436,7 @@ class WeixinController extends Controller
 			// submit news
 			$res = $api->add_news($news);
 			//var_dump($res);
+			Log::error("Creating News .. ");
 			
 			// handle result
 			if ($res[0] == "NULL") {
@@ -452,13 +453,13 @@ class WeixinController extends Controller
 				$newsid = $res[1]->media_id;
 				// Update wxmedia table
 				WxmediaController::createWxmedia($newsid, $postids, $thumbids, $mediaids);
-				
+				Log::error("Creating Wxmedia record .. ");
 				// Update post table 'isublished'
 				$terms = array(
 					'ispublished' => 1
 				);
 				PostController::updateByIds($terms, $postids);
-				
+				Log::error("Updateing Posts to ispublished .. ");
 				// Send preview to @AW
 				$res = $api->sendPreview ($newsid, Config::get("weixin.adminopenid"));
 				$api->send(Config::get("weixin.adminopenid"), "INFO：上传图文完成，请预览");
@@ -468,7 +469,7 @@ class WeixinController extends Controller
 					'inpreview' => 1
 				);
 				$res = WxmediaController::updateWxmedia($data);
-						
+				Log::error("Updateing Wxmedia to inpreview .. ");
 				return $newsid;
 			}
 		}
