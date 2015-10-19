@@ -48,7 +48,7 @@ class HourlyPush extends Command
     	$weixin = new \App\Http\Controllers\WeixinController();
     	
     	//$newsid = "";
-    	$weixin->sendPushMsg($newsid, Config::get("weixin.wxtestergroup"), false);
-    	//$weixin->sendPushMsg();
+    	//$weixin->sendPushMsg($newsid, Config::get("weixin.wxtestergroup"), false);
+    	$weixin->sendPushMsg();
     }
 }
