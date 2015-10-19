@@ -50,7 +50,7 @@ class Document
     	$this->targetHost = $targetHost;
     	$this->config = Document\Config::get($config);
         $this->source = $source;
-        \Log::info(__Method__." Load HTML with config name [$config]");
+        //\Log::info(__Method__." Load HTML with config name [$config]");
 
         // Convert source to UTF-8 format
         $source = mb_convert_encoding($source, 'HTML-ENTITIES', self::DOM_DEFAULT_CHARSET);
@@ -119,7 +119,7 @@ class Document
             }
         }
 
-        \Log::debug(__Method__." Parsed source OG Info [".json_encode($this->_OGInfo)."]");
+        //\Log::debug(__Method__." Parsed source OG Info [".json_encode($this->_OGInfo)."]");
     }
 
     /* For calculating content area */
@@ -836,7 +836,7 @@ class Document
                 'thumbnail' => $this->_getArticleThumbnail(),
                 'description' => $this->_getArticleSummary()
             );
-            \Log::debug(__Method__." get META data only, going to return [".json_encode($response)."]");
+            //\Log::debug(__Method__." get META data only, going to return [".json_encode($response)."]");
             return $response;
         }
 

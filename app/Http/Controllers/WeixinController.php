@@ -19,7 +19,7 @@ class WeixinController extends Controller
 	
 	
 	// Post count of Per Day Msg (exclude the featured Post)
-	const ITEMS_PER_SUBMIT = 1;
+	const ITEMS_PER_SUBMIT = 5;
 	// Keep N newsids on Weixin side
 	const ITEMS_KEEP_ON_WEIXIN = 50;
 	
