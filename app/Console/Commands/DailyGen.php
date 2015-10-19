@@ -54,7 +54,8 @@ class DailyGen extends Command
     	Log::error('Create news: '.$newsid);
     	
     	$weixin->wxHouseKeeping();
-    	$cmd = "rm -rf /tmp/*";
+    	//$cmd = "rm -rf /tmp/*";
+    	$cmd = "find /tmp -type f -mtime +7 -exec rm -rf {} \;";
     	system($cmd);
     }
 }

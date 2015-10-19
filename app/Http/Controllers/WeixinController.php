@@ -252,6 +252,7 @@ class WeixinController extends Controller
 		} else{
 			$ext = pathinfo($remoteurl, PATHINFO_EXTENSION);
 			$tmpFile = "/tmp/".time().".".$ext;
+			//echo "Img Url: ".$remoteurl."\n";
 			//echo "tmpFile: ".$tmpFile."\n";
 			//copy($remoteurl, $tmpFile);
 						

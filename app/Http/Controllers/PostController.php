@@ -432,7 +432,6 @@ class PostController extends Controller
     				}
     			}
     			$res['images'] = $images;
-    
     			return $res;
     		} else {
     			return false;
@@ -441,6 +440,56 @@ class PostController extends Controller
     		Log::error('Cannot fetch data from url: ' . $url . '; ' . $e);
     		return false;
     	}
+    }
+    
+    /**
+     * Make external image cached by internal Url
+     */
+    public static function getImageCache($imageurl)
+    {
+	    // $urlsample = "http://".env("DOMAINNAME")."/imgcache/".$imageurl;
+		// getimagesize() supports jpg / png / gif, but not mp4
+		
+		$imageurl = str_replace("@@@", "/", $imageurl);
+		
+    	$x = getimagesize($imageurl);
+		
+		$ext = "";
+		if ($x != false && is_array($x)) {
+			switch ($x['mime']) {
+				case "image/gif":
+					$ext = "gif";
+					break;
+				case "image/jpeg":
+					$ext = "jpg";
+					break;
+				case "image/png":
+					$ext = "png";
+					break;
+			}
+		}
+		//echo $x['mime'];die();
+		
+		if($ext != "") {
+			//return response(readfile($imageurl), 200)->header('Content-Type', $x['mime']);
+			ob_start();
+			header("Content-type: ".$x['mime']);
+			readfile($imageurl);
+			ob_end_flush();
+			return true;
+		}
+    }
+    
+    /**
+     * internal cache url encode
+     */
+    public static function internalCacheUrlencode($url)
+    {
+    	// update all external image URL to internal for better CDN caching
+    	// replace "/" to "@@@", because laravel path matching will be failed
+    	$url = urlencode(str_replace("/", "@@@", $url));
+    	$url = "http://".env("DOMAINNAME")."/imgcache/".$url;
+    	return $url;
     }
 
     /**

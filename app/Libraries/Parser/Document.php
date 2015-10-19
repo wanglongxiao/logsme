@@ -362,7 +362,6 @@ class Document
             // Return only valid image url
             if (Document\Helper::isValidUrl($imageUrl) && !in_array($imageUrl, $images))
             {
-                $images[] = $imageUrl;
                 // added by Alex Wang , 201510
                 // convert possible bigger image to responsive, replace img style to bootstrap "class='img-responsive'"
                 $width = 0;
@@ -371,8 +370,11 @@ class Document
                 $width = $size[0];
                 // Threshold is 300
                 if ($width >= 300) {
+                	// update all external image URL to internal for better CDN caching
+    				$imageUrl = \App\Http\Controllers\PostController::internalCacheUrlencode($imageUrl);
                 	$imageTagHtml = "<img src='$imageUrl' class='img-responsive'>";
                 	$image->outertext = $imageTagHtml;
+                	$images[] = $imageUrl;
                 } else {
                 	// remove small image from html
                 	$image->outertext = '';
@@ -400,7 +402,9 @@ class Document
 
         // Step 1: Try to get og:image as thumbnail
         if (isset($this->_OGInfo['images']) && count($this->_OGInfo['images']) > 0) {
-            return $this->_OGInfo['images'][0];
+        	// update all external image URL to internal for better CDN caching
+        	$imageUrl = \App\Http\Controllers\PostController::internalCacheUrlencode($this->_OGInfo['images'][0]);
+        	return $imageUrl;
         }
 
         // Syep 2: Try to output first image if possible

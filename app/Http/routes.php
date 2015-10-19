@@ -34,6 +34,8 @@ Route::get('/sitemap',  function(){
 	return response()->view('sitemap')->header('Content-Type', 'text/xml');
 });
 
+Route::get('/imgcache/{imageurl}', 'PostController@getImageCache');
+
 
 Route::any('/admin/fetch', 'PostController@fetchPost');
 
