@@ -256,41 +256,63 @@ class WeixinController extends Controller
 		{  
 			return FALSE;
 		} else{
-			$ext = pathinfo($remoteurl, PATHINFO_EXTENSION);
+			//$ext = pathinfo($remoteurl, PATHINFO_EXTENSION);
+			$x = getimagesize($imageurl);
+			$ext = "";
+			if ($x != false && is_array($x)) {
+				switch ($x['mime']) {
+					case "image/gif":
+						$ext = "gif";
+						break;
+					case "image/jpeg":
+						$ext = "jpg";
+						break;
+					case "image/png":
+						$ext = "png";
+						break;
+				}
+			}
+			if ($ext == "") return FALSE;
+			
 			$tmpFile = "/tmp/".time().".".$ext;
 			//echo "Img Url: ".$remoteurl."\n";
 			//echo "tmpFile: ".$tmpFile."\n";
 			
-			try {		
-				list($width, $height) = getimagesize($remoteurl);
-				$ratio = $width / $height;
-				// normal case
-				if ($width <= $maxWidth) {
-						$new_width = $width;
-						$new_height = $height;
+			try {
+				// only resize jpg and png
+				if ($ext != "gif") {
+					list($width, $height) = getimagesize($remoteurl);
+					$ratio = $width / $height;
+					// normal case
+					if ($width <= $maxWidth) {
+							$new_width = $width;
+							$new_height = $height;
+					} else {
+							$new_width = $maxWidth;
+							$new_height = round ($new_width / $ratio);
+					}
+					// long image
+					if ($ratio < $allowMinRatio) {
+						$new_width = round ($new_width / 2);
+						$new_height =  round ($new_height / 2);			
+					}
+						
+					$image_p = imagecreatetruecolor($new_width, $new_height);
+					if ($ext == "png") {
+						$image = imagecreatefrompng($remoteurl);
+					} else if ($ext == "jpg") {
+						$image = imagecreatefromjpeg($remoteurl);
+					}
+					imagecopyresampled($image_p, $image, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
+					if ($ext == "png") {
+						imagepng($image_p, $tmpFile);
+					} else if ($ext == "jpg") {
+						imagejpeg($image_p, $tmpFile, 80);
+					}
+					imagedestroy($image_p);
 				} else {
-						$new_width = $maxWidth;
-						$new_height = round ($new_width / $ratio);
+					copy($remoteurl, $tmpFile);
 				}
-				// long image
-				if ($ratio < $allowMinRatio) {
-					$new_width = round ($new_width / 2);
-					$new_height =  round ($new_height / 2);			
-				}
-					
-				$image_p = imagecreatetruecolor($new_width, $new_height);
-				if ($ext == "png") {
-					$image = imagecreatefrompng($remoteurl);
-				} else {
-					$image = imagecreatefromjpeg($remoteurl);
-				}
-				imagecopyresampled($image_p, $image, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
-				if ($ext == "png") {
-					imagepng($image_p, $tmpFile);
-				} else {
-					imagejpeg($image_p, $tmpFile, 80);
-				}
-				imagedestroy($image_p);
 			} catch (Exception $e) {
 			    Log::error ($remoteurl." : ".$e->getMessage());
 			    copy($remoteurl, $tmpFile);
