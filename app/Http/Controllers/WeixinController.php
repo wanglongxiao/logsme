@@ -120,7 +120,7 @@ class WeixinController extends Controller
 	    	$cmdarr = explode(" ", $msg->Content);
 	    	if (isset($cmdarr) && is_array($cmdarr) && count($cmdarr) >= 2) {
 		    	if ($cmdarr[1] == "all") {
-		    		self::sendPushMsg();
+		    		self::sendPushMsg("", "all", false);
 		    		Log::error('Sent news to all users. ');
 		    	} else if ($cmdarr[1] == "test") {
 		    		self::sendPushMsg("", Config::get("weixin.wxtestergroup"), false);
