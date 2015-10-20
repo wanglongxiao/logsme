@@ -257,7 +257,7 @@ class WeixinController extends Controller
 			return FALSE;
 		} else{
 			//$ext = pathinfo($remoteurl, PATHINFO_EXTENSION);
-			$x = getimagesize($imageurl);
+			$x = getimagesize($remoteurl);
 			$ext = "";
 			if ($x != false && is_array($x)) {
 				switch ($x['mime']) {
