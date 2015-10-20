@@ -490,9 +490,21 @@ class WeixinController extends Controller
 	public function sendPushMsg($newsid = "", $groupid = "all", $triggerFromCron = true)
 	{
 		$api = self::getApi();
+		$pushed = false;
+		$canPush = false;
 		$day =  date('Y-m-d');
 		
-		//if not given newsid, get the oldest 'isset = 0' newsid
+		// judge issent today or not
+		$terms = array(
+				'issent' => 1,
+				'sent_at' => $day." 00:00:00"
+		);
+		$res = WxmediaController::getWxmediaByFilter($terms);
+		if ($res->isEmpty()) {
+			$canPush = true;
+		}
+		
+		// if not given newsid, get the oldest 'isset = 0' newsid
 		if (!isset($newsid) || $newsid == "") {
 			$terms = array(
 					'issent' => 0,
@@ -503,8 +515,7 @@ class WeixinController extends Controller
 				$newsid = $res[0]['attributes']['newsid'];
 			} else {
 				// send Msg to @AW, no news can be pushed
-				echo "No news available \n";
-				$api->send(Config::get("weixin.adminopenid"), "ERR：没有可用图文");
+				if ($canPush) $api->send(Config::get("weixin.adminopenid"), "ERR：没有可用图文");
 				return false;
 			}
 		}
@@ -516,55 +527,48 @@ class WeixinController extends Controller
 			//echo $day." ".$schedule." \n";
 			$scheduledTime = strtotime($day." ".$schedule);
 			
-			// judge issent today
-			$terms = array(
-				'issent' => 1,
-				'sent_at' => $day." 00:00:00"
-			);
-			$res = WxmediaController::getWxmediaByFilter($terms);
-			if ($res->isEmpty()) {
-				$canPush = true;
-			} else $canPush = false;
-			
 			// judge reach the sending schedule
 			if ($canPush && time() > $scheduledTime) {
 				$res = $api->sendMsgToGroup ($newsid, $groupid);
-				//echo "auto push done \n";
+				$pushed = true;
+				Log::error ("auto push done");
 			} else {
 				return false;
 			}
 		} else {
 			$res = $api->sendMsgToGroup ($newsid, $groupid);
-			//echo "manual push done \n";
+			$pushed = true;
+			Log::error ("manual push done");
 		}
 		
 		// if push msg to 'all', update wxmedia table. Set this newsid can not be pushed again
-		if ($groupid == "all") {
+		if ($pushed) {
+			if ($groupid == "all") {
+				$data = array(
+						'newsid' => $newsid,
+						'inpreview' => 0,
+						'issent' => 1,
+						'sent_at' => $day." 00:00:00"
+				);
+				$res = WxmediaController::updateWxmedia($data);
+				// default : 0000-00-00 00:00:00
+			}
+			
+			//update user table lastpush_time
 			$data = array(
-					'newsid' => $newsid,
-					'inpreview' => 0,
-					'issent' => 1,
-					'sent_at' => $day." 00:00:00"
+				'lastpush_time' => $day." 00:00:00"
 			);
-			$res = WxmediaController::updateWxmedia($data);
-			// default : 0000-00-00 00:00:00
+			if ($groupid == "all") {
+				UserController::updateByGroups($data);
+				echo "group all \n";
+			} else {
+				UserController::updateByGroups($data, array($groupid));
+				echo "group $groupid \n";
+			}
+			
+			// send Msg to @AW, daily push done
+			$api->send(Config::get("weixin.adminopenid"), "INFO：图文消息已发送，".$day);
 		}
-		
-		//update user table lastpush_time
-		$data = array(
-			'lastpush_time' => $day." 00:00:00"
-		);
-		if ($groupid == "all") {
-			UserController::updateByGroups($data);
-			echo "group all \n";
-		} else {
-			UserController::updateByGroups($data, array($groupid));
-			echo "group $groupid \n";
-		}
-		
-		// send Msg to @AW, daily push done
-		$api->send(Config::get("weixin.adminopenid"), "INFO：图文消息已发送，".$day);
-		
 		return true;
 	}
 
