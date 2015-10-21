@@ -70,6 +70,7 @@ if ($id != "") {
 	@if ($action == "/admin/update")
 		<button type="button" class="btn btn-info" onClick="window.location.href='/admin/fetch?url={{ $url }}'">ReFetch Url</button>
 		<span style="float:right;">
+					<a href='/post/{{ $id }}'><span class="label label-danger">#{{ $id }}</span></a>
 					@if ($isapproved == 0)
 					<a href='/list?isapproved=0'><span class="label label-default">NotApprove</span></a>
 					@else

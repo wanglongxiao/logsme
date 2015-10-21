@@ -453,7 +453,7 @@ class WeixinController extends Controller
 				// Judge thumb upload failed or not
 				if ($createMediaRes != FALSE) {
 					$thumbmediaid = $createMediaRes[0];
-					$item ['id'] = $hashids->encode($item ['id']);
+					$sourcepageid = $hashids->encode($item ['id']);
 					// gen newsitem
 					$newsitem = array(
 							'title' => $item ['title'],
@@ -463,7 +463,7 @@ class WeixinController extends Controller
 							'show_cover_pic' => 0,
 							'content' => $html,
 							// update later by config
-							'content_source_url' => "http://".env('DOMAINNAME')."/post/".$item ['id']
+							'content_source_url' => "http://".env('DOMAINNAME')."/post/".$sourcepageid
 					);
 					
 					array_push($postids, $item ['id']);
