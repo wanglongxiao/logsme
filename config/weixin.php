@@ -38,6 +38,8 @@ return [
 		
 	'minhashlength' => 8,
 	
+	'localtimezone' => 'Asia/Shanghai',
+	
 	//'translateapi' => 'https://translate.googleapis.com/translate_a/single',
 	'translateapi' => 'http://openapi.baidu.com/public/2.0/bmt/translate',
 	

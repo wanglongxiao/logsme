@@ -557,10 +557,13 @@ class WeixinController extends Controller
 			$weekday = date('w');
 			$schedule = Config::get("weixin.schedule.".$weekday);
 			//echo $day." ".$schedule." \n";
+			$date = new \DateTime(null, new \DateTimeZone(Config::get("weixin.localtimezone")));
+			$currentTime = ($date->getTimestamp() + $date->getOffset());
 			$scheduledTime = strtotime($day." ".$schedule);
+			//Log::error("newsid: ".$newsid." | canpush: ".$canPush." | day: ".$day." | schedule: ".$schedule." | currenttime: ".$currentTime." | scheduletime: ".$scheduledTime);
 			
 			// judge reach the sending schedule
-			if ($canPush && time() > $scheduledTime) {
+			if ($canPush && $currentTime > $scheduledTime) {
 				$res = $api->sendMsgToGroup ($newsid, $groupid);
 				$pushed = true;
 				Log::error ("auto push done");
