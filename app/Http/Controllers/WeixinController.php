@@ -228,7 +228,7 @@ class WeixinController extends Controller
 				Log::error('Media size > 1M, skipped: '.$remoteurl);
 				return FALSE;
 			}
-		} catch (Exception $e) {
+		} catch (\Exception $e) {
 			Log::error ("Create media failed : ".$remoteurl." , ".$e->getMessage());
 			return FALSE;
 		}
@@ -274,7 +274,7 @@ class WeixinController extends Controller
 							break;
 					}
 				}
-			} catch (Exception $e) {
+			} catch (\Exception $e) {
 				Log::error ("Got ERR while fetching ".$remoteurl." : ".$e->getMessage());
 				return FALSE;
 			}
@@ -319,7 +319,7 @@ class WeixinController extends Controller
 				} else {
 					copy($remoteurl, $tmpFile);
 				}
-			} catch (Exception $e) {
+			} catch (\Exception $e) {
 			    Log::error ($remoteurl." : ".$e->getMessage());
 			    copy($remoteurl, $tmpFile);
 			}

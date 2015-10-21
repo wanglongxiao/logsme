@@ -291,9 +291,9 @@ class PostController extends Controller
     	//$post = new Post;
     	/*
     	try {
-    	$post = Post::where('url', '=', $request->url)->firstOrFail();
-    	} catch (Exception $e) {
-    	$post = new Post;
+    		$post = Post::where('url', '=', $request->url)->firstOrFail();
+    	} catch (\Exception $e) {
+    		$post = new Post;
     	}
     	*/
     	$url = urldecode(trim($request->url));
@@ -436,7 +436,7 @@ class PostController extends Controller
     		} else {
     			return false;
     		}
-    	} catch (Exception $e) {
+    	} catch (\Exception $e) {
     		Log::error('Cannot fetch data from url: ' . $url . '; ' . $e);
     		return false;
     	}
