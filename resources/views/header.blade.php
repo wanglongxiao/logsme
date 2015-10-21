@@ -3,7 +3,7 @@
 <head>
         <meta charset='utf-8' />
         <!-- not impact web page by baidu reader -->
-        <meta http-equiv="Cache-Control" content="no-siteapp" />
+        <meta http-equiv="Cache-Control" content="no-siteapp, max-age=7200" />
         <!-- for web page responsive --> 
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- 针对手持设备优化，主要是针对一些老的不识别viewport的浏览器，比如黑莓 -->
