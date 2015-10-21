@@ -241,6 +241,7 @@ class WeixinController extends Controller
 	public static function copyResizeRemoteImage($remoteurl, $maxWidth = 800)
 	{
 		$allowMinRatio = 0.25;
+		$ext = "";
 		
 		// judge include Chinese or not
 		if (preg_match("/[\x7f-\xff]/", $remoteurl)) {
@@ -256,21 +257,26 @@ class WeixinController extends Controller
 		{  
 			return FALSE;
 		} else{
-			//$ext = pathinfo($remoteurl, PATHINFO_EXTENSION);
-			$x = getimagesize($remoteurl);
-			$ext = "";
-			if ($x != false && is_array($x)) {
-				switch ($x['mime']) {
-					case "image/gif":
-						$ext = "gif";
-						break;
-					case "image/jpeg":
-						$ext = "jpg";
-						break;
-					case "image/png":
-						$ext = "png";
-						break;
+			try {
+				//$ext = pathinfo($remoteurl, PATHINFO_EXTENSION);
+				$x = getimagesize($remoteurl);
+				
+				if ($x != false && is_array($x)) {
+					switch ($x['mime']) {
+						case "image/gif":
+							$ext = "gif";
+							break;
+						case "image/jpeg":
+							$ext = "jpg";
+							break;
+						case "image/png":
+							$ext = "png";
+							break;
+					}
 				}
+			} catch (Exception $e) {
+				Log::error ("Got ERR while fetching ".$remoteurl." : ".$e->getMessage());
+				return FALSE;
 			}
 			if ($ext == "") return FALSE;
 			
