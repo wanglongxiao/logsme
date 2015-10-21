@@ -37,6 +37,8 @@ Route::get('/sitemap',  function(){
 Route::get('/imgcache/{imageurl}', 'PostController@getImageCache');
 
 
+Route::any('/admin/list', 'PostController@getList');
+
 Route::any('/admin/fetch', 'PostController@fetchPost');
 
 Route::get('/admin/edit/{id}', 'PostController@getPostToEdit');

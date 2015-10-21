@@ -437,6 +437,8 @@ class WeixinController extends Controller
 			$thumbids = array();
 			$mediaids = array();
 			$news = array();
+			$hashids = new \Hashids\Hashids("", Config::get("weixin.minhashlength"));
+				
 			foreach ($data as $item) {
 				$html = "";
 				$itemMediaids = array();
@@ -451,7 +453,7 @@ class WeixinController extends Controller
 				// Judge thumb upload failed or not
 				if ($createMediaRes != FALSE) {
 					$thumbmediaid = $createMediaRes[0];
-					
+					$item ['id'] = $hashids->encode($item ['id']);
 					// gen newsitem
 					$newsitem = array(
 							'title' => $item ['title'],
