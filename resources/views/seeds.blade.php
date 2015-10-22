@@ -23,11 +23,12 @@
 			  <li class="list-group-item"><a href="http://www.nmplus.hk" target="_blank">http://www.nmplus.hk</a></li>
 			  <li class="list-group-item"><a href="http://www.bomb01.com" target="_blank">http://www.bomb01.com</a></li>
 			  <li class="list-group-item"><a href="http://www.push01.com" target="_blank">http://www.push01.com</a></li>
+			  <li class="list-group-item"><a href="http://www.juksy.com" target="_blank">http://www.juksy.com/</a></li>
+			  <li class="list-group-item"><a href="http://www.chinatimes.com/photo-app" target="_blank">http://www.chinatimes.com</a></li>
 			  <li class="list-group-item"><a href="http://www.life.com.tw" target="_blank">http://www.life.com.tw</a></li>
 			  <li class="list-group-item"><a href="http://www.fhm.com.tw" target="_blank">http://www.fhm.com.tw</a></li>
 			  <li class="list-group-item"><a href="http://www.weekendhk.com" target="_blank">http://www.weekendhk.com</a></li>
 			  <li class="list-group-item"><a href="http://www.goez1.com" target="_blank">http://www.goez1.com</a></li>
-			  <li class="list-group-item"><a href="http://cool3c.com" target="_blank">http://cool3c.com</a></li>
 			</ul>
 			@endif
 		  </div>

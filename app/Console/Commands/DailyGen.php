@@ -44,7 +44,8 @@ class DailyGen extends Command
     {
         //
         //$user = $this->argument('user');
-        
+        Log::error("Start DailyGen crontab ..");
+    	
     	$weixin = new \App\Http\Controllers\WeixinController();
     	
     	//$weixin->syncUser(true);
@@ -57,5 +58,7 @@ class DailyGen extends Command
     	//$cmd = "rm -rf /tmp/*";
     	$cmd = "find /tmp -type f -mtime +7 -exec rm -rf {} \;";
     	system($cmd);
+    	
+    	Log::error("End DailyGen crontab !");
     }
 }

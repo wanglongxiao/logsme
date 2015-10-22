@@ -44,11 +44,14 @@ class HourlyPush extends Command
     {
         //
         //$user = $this->argument('user');
+    	Log::error("Start HourlyPush crontab ..");
         
     	$weixin = new \App\Http\Controllers\WeixinController();
     	
     	//$newsid = "";
     	//$weixin->sendPushMsg($newsid, Config::get("weixin.wxtestergroup"), false);
     	$weixin->sendPushMsg();
+    	
+    	Log::error("End HourlyPush crontab !");
     }
 }
