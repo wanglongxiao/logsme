@@ -45,6 +45,6 @@ class AuthController extends Controller
 		if ($user->getEmail() == env('ADMINEMAIL')) {
 			Session::put('loginuser', $user->getEmail());
 		}
-        return redirect('/');    
+        return redirect('/admin/list');    
     }
 }

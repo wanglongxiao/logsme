@@ -1,3 +1,7 @@
+<?php 
+$currenturlpath = parse_url(Request::url(), PHP_URL_PATH);
+$urlpaths = explode("/", trim($currenturlpath, "/"));
+?>
 <nav class="navbar navbar-inverse navbar-fixed-bottom">
   <div class="container">
     <p class="navbar-text navbar-right">
@@ -6,9 +10,10 @@
     	<a href='/tag/{{ $key }}'><?php echo mb_substr($val, -2); ?></a> |
     	@endforeach
     	<a href='/howtoplayvideo'>帮助</a>
-    	@if (Session::get('loginuser') == env('ADMINEMAIL'))
+    	@if ($urlpaths[0] == 'admin' && Session::get('loginuser') == env('ADMINEMAIL'))
     	<br>
-    	&nbsp;&nbsp;&nbsp;&nbsp;<a href='/admin/fetch' style="color:#FFFFFF;">抓取</a>
+    	&nbsp;&nbsp;&nbsp;&nbsp;<a href='/admin/list' style="color:#FFFFFF;">管理</a>
+    	| <a href='/admin/fetch' style="color:#FFFFFF;">抓取</a>
     	| <a href='/admin/bookmarklet' style="color:#FFFFFF;">快键</a>
     	| <a href='/admin/seeds' style="color:#FFFFFF;">素材</a>
     	| <a href='/auth/facebook' style="color:#FFFFFF;">登录</a>

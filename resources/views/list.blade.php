@@ -55,9 +55,6 @@ if ($item->tags != "") {
 						<a href="#" class="bds_fbook" data-cmd="fbook" title="分享到Facebook" data-id="{{ $item->id }}"></a>
 					</div>
 
-					@if ($isadmin)
-						<a href='/admin/edit/{{ $item->id }}' style="font-size:18px;">[Edit]</a>
-					@endif
 				</div>
 	 		</div>
 		</div>

@@ -63,6 +63,20 @@ class PostController extends Controller
     }
     
     /**
+     * Responds to requests to GET /admin/list
+     */
+    public static function getAdminList()
+    {
+    	$type = "text/html";
+    	$terms = array(
+    			'isapproved' => 1
+    	);
+    	$data = self::getListByFilter($terms);
+    
+    	return response()->view('adminlist', [ 'data' => $data, 'isadmin' => self::isAdmin()])->header('Content-Type', $type);
+    }
+    
+    /**
      * Responds to requests to GET /list?type=[img|vid]&isapproved=[0|1]&ispublished=[0|1]&isfeatured=[0|1]
      */
     public static function getList(Request $request)

@@ -47,9 +47,6 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 				    	<a href="/tag/{{ $tag }}" style="font-size:18px;"><span class="label label-primary">{{ $alltags[$tag] }}</span></a>
 				    @endforeach
 				    @endif
-				    @if ($isadmin)
-				  	<a href='/admin/edit/{{ $data["id"] }}' style="font-size:18px;">[Edit]</a>
-				  	@endif
 				    <div class="bdsharebuttonbox" style="float:right;margin:0 0 5px 5px;">
 						<a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信" style="display:inline;"></a>
 						<a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ"></a>
