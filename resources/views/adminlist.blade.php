@@ -2,6 +2,12 @@
 
 @include('navbar')
 
+@if (Session::get('loginuser') != env('ADMINEMAIL'))
+<script>
+	window.location.href = '{{ url("http://".env("DOMAINNAME")) }}';
+</script>
+@endif
+
 <div class="container">
 @foreach ($data as $item)
 

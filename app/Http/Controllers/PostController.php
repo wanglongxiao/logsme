@@ -238,7 +238,7 @@ class PostController extends Controller
     		$post->delete();
     	}
     
-    	return redirect('/');
+    	return redirect('/admin/list');
     }
     
     /**
@@ -334,7 +334,7 @@ class PostController extends Controller
     
     	$post->save();
     
-    	return redirect('/');
+    	return redirect('/admin/list');
     }    
     
     /**
@@ -373,7 +373,7 @@ class PostController extends Controller
 		    return redirect('/admin/edit/'.$id);
 	    }
     
-    	return redirect('/');
+    	return redirect('/admin/list');
     }
 
     /**
