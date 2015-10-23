@@ -568,7 +568,7 @@ class WeixinController extends Controller
 			$date = new \DateTime(null, new \DateTimeZone(Config::get("weixin.localtimezone")));
 			$currentTime = ($date->getTimestamp() + $date->getOffset());
 			$scheduledTime = strtotime($day." ".$schedule);
-			Log::error("newsid: ".$newsid." | canpush: ".$canPush." | day: ".$day." | schedule: ".$schedule." | currenttime: ".$currentTime." | scheduletime: ".$scheduledTime);
+			//Log::error("newsid: ".$newsid." | canpush: ".$canPush." | day: ".$day." | schedule: ".$schedule." | currenttime: ".$currentTime." | scheduletime: ".$scheduledTime);
 			
 			// judge reach the sending schedule
 			if ($canPush && $currentTime > $scheduledTime) {
